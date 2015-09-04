@@ -45,7 +45,7 @@ public class IOManager {
 		}
 	}
 	
-	public static void saveMultipleGenomesToFile(List<Genome> genomes, int generationNumber) {
+	public static void saveMultipleGenomesToFile(int generationNumber, List<Genome> genomes) {
 		for(Genome g: genomes) {
 			saveGenomeToFile(g, generationNumber);
 		}

@@ -61,7 +61,13 @@ public class Evolver {
 		if (!evolve) {
 			numberOfGenerations = 1;
 			Species species = new Species(25, hiddenSize, 5);
-			Genome genome = IOManager.readGenomeNumber(0);
+			Genome genome;
+			if(readOld) {
+				genome = IOManager.readGenomeNumber(1,1);
+			} else {
+				genome = new Genome(species, 0, 0);
+			}
+			
 			Network network = new Network(genome, species);
 			
 			List<Network> networks = new ArrayList<Network>();
@@ -81,7 +87,7 @@ public class Evolver {
 		//Specipes species = new Species(4, 4, 4);
 		Genome currentGenome;
 		if (readOld) {
-			currentGenome = IOManager.readGenomeNumber(readGen);
+			currentGenome = IOManager.readGenomeNumber(1,1);
 		} else {
 			currentGenome = new Genome(species, 0, 0);
 		}
@@ -107,6 +113,6 @@ public class Evolver {
 			System.out.println("Highest fitness: " + currentGeneration.highestFitness());
 			numberOfGenerations++;
 		} while(currentGeneration.highestFitness() < terminalFitness && currentGeneration.getNumber() < terminalGeneration);
-		IOManager.saveMultipleGenomesToFile(Network.networksToGenomes(currentGeneration.getTopNetworksWithHighestFitness(elitists)));
+		IOManager.saveMultipleGenomesToFile(1, Network.networksToGenomes(currentGeneration.getTopNetworksWithHighestFitness(elitists)));
 	}
 }
