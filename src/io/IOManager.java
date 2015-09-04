@@ -61,13 +61,13 @@ public class IOManager {
 		
 		int lastGenomeNumber = getLatestGenomeNumber(generationNumber);
 		for(int i = 1; i < lastGenomeNumber+1; i++) {
-			result.add(readGenomeNumber(generationNumber, i));
+			result.add(readGenome(generationNumber, i));
 		}
 		
 		return result;
 	}
 	
-	public static Genome readGenomeNumber(int generationNumber, int genomeNumber) {
+	public static Genome readGenome(int generationNumber, int genomeNumber) {
 		String jsonAsString = null;
 		try {
 			jsonAsString = FileUtils.readFileToString(new File(getGenomeFileName(generationNumber, genomeNumber)));
@@ -101,6 +101,30 @@ public class IOManager {
 		}
 		return latestGenomeNumber;
 	}
+	
+//	private static int getLatestGenerationNumber(int generationNumber) {
+//		IOFileFilter fileFilter = new IOFileFilter() {
+//			@Override
+//			public boolean accept(File arg0, String arg1) {
+//				return arg0.getName().contains(generationFileName);
+//			}
+//
+//			@Override
+//			public boolean accept(File arg0) {
+//				return arg0.getName().contains(generationFileName);
+//			}
+//		};
+//		
+//		Collection<File> genomeFiles = FileUtils.listFiles(new File(getGenerationFilePath(generationNumber)), fileFilter, FalseFileFilter.FALSE);
+//		
+//		int latestGenomeNumber = 0;
+//		for(File f: genomeFiles) {
+//			int genomeNumber = getGenomeNumberFromFileName(f.getName());
+//			if(genomeNumber > latestGenomeNumber)
+//				latestGenomeNumber = genomeNumber;
+//		}
+//		return latestGenomeNumber;
+//	}
 	
 	private static int getGenomeNumberFromFileName(String fileName) {
 		char[] chars = fileName.toCharArray();

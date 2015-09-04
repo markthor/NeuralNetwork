@@ -65,7 +65,7 @@ public class Evolver {
 			Species species = new Species(25, hiddenSize, 5);
 			Genome genome;
 			if(readOld) {
-				genome = IOManager.readGenomeNumber(1,1);
+				genome = IOManager.readGenome(1,1);
 			} else {
 				genome = new Genome(species, 0, 0);
 			}
@@ -88,7 +88,7 @@ public class Evolver {
 		Species species = new Species(25, hiddenSize, 5);
 		Genome currentGenome;
 		if (readOld) {
-			currentGenome = IOManager.readGenomeNumber(1,1);
+			currentGenome = IOManager.readGenome(1, 1);
 		} else {
 			currentGenome = new Genome(species, 0, 0);
 		}
