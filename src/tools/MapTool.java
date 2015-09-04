@@ -25,7 +25,7 @@ public class MapTool
         	} else if(result == -1) {
         		return 1;
         	}
-        	return 1;
+        	return 0;
         }
     } );
 
