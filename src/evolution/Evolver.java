@@ -17,6 +17,7 @@ public class Evolver {
 
 	public static boolean evolve;
 	public static boolean readOld;
+	public static boolean infinity;
 	public static int readGen;
 	
 	// Evolution parameters
@@ -47,6 +48,7 @@ public class Evolver {
 	private static void setDefaultArgs() {
 		evolve = false;
 		readOld = false;
+		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters

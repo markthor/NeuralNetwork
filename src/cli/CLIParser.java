@@ -23,6 +23,7 @@ public class CLIParser {
 		options.addOption("s", "hidden-size", true, "Size of the hidden layer (int)");
 		options.addOption("m", "chance", true, "Chance of a mutation (double)");
 		options.addOption("i", "intensity", true, "Intensity of mutation (double)");
+		options.addOption("I", "infinity", false, "Simulation never terminates (ignores terminal fitness and terminal generation)");
 		options.addOption("c", "children", true, "Number of children (int)");
 		options.addOption("E", "elitists", true, "Number of elitists (int)");
 		options.addOption("tf", "terminal-fitness", true, "Terminal fitness (int)");
@@ -42,6 +43,9 @@ public class CLIParser {
 		    }
 		    if (line.hasOption("r")) {
 		    	Evolver.readOld = true;
+		    }
+		    if (line.hasOption("I")) {
+		    	Evolver.infinity = true;
 		    }
 		    if (line.hasOption("g")) {
 		    	Evolver.readGen = Integer.parseInt(line.getOptionValue("g"));
