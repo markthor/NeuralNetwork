@@ -28,6 +28,7 @@ public class CLIParser {
 		options.addOption("tf", "terminal-fitness", true, "Terminal fitness (int)");
 		options.addOption("tg", "terminal-generation", true, "Terminal generation (int)");
 		options.addOption("h", "help", false, "Show this help message");
+		options.addOption("si", "save-interval", true, "Save every N'th generation to file (int)");
 		
 		try {
 		    // parse the command line arguments
@@ -63,6 +64,9 @@ public class CLIParser {
 		    }
 		    if (line.hasOption("tg")) {
 		    	Evolver.terminalGeneration = Integer.parseInt(line.getOptionValue("tg"));
+		    }
+		    if (line.hasOption("si")) {
+		    	Evolver.saveInterval = Integer.parseInt(line.getOptionValue("si"));
 		    }
 		    if (line.hasOption("h")) {
 		    	// automatically generate and print the help statement

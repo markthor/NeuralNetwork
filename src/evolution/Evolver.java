@@ -28,6 +28,7 @@ public class Evolver {
 	public static int terminalFitness;
 	public static int terminalGeneration;
 	public static int numberOfGenerations;
+	public static int saveInterval;
 	
 	/**
 	 * The main method. Several options are listed - simply remove comments to use the option you want.
@@ -54,6 +55,7 @@ public class Evolver {
 		elitists = 5;
 		terminalFitness = 1300;
 		terminalGeneration = 2;
+		saveInterval = 100;
 	}
 	
 	private static void startSimulation() {
