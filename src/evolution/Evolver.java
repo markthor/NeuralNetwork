@@ -96,7 +96,7 @@ public class Evolver {
 		if (readOld) {
 			currentGenome = IOManager.readGenome(1, 1);
 		} else {
-			currentGenome = new Genome(species, 0, 0);
+			currentGenome = new Genome(species, initialWeight, initialBias);
 		}
 		Network currentNetwork = new Network(currentGenome, species);
 		Generation currentGeneration = new Generation(numberOfGenerations, currentNetwork, children, chanceOfMutation, intensity);
@@ -122,7 +122,13 @@ public class Evolver {
 			}
 			
 			numberOfGenerations++;
-		} while(currentGeneration.highestFitness() < terminalFitness && currentGeneration.getNumber() < terminalGeneration);
+		} while(terminate(currentGeneration));
 		currentGeneration.saveGeneration(elitists);
+	}
+	
+	private static boolean terminate(Generation generation) {
+		if(infinity) return false;
+		if(generation.highestFitness() < terminalFitness && generation.getNumber() < terminalGeneration) return true;
+		return false;
 	}
 }
