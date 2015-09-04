@@ -33,6 +33,7 @@ public class Evolver {
 	 */
 	public static void main(String[] args)
 	{
+		//HVA SÅ BETON
 		Executor exec=new Executor();
 		if (!evolve) {
 			Species species = new Species(25, hiddenSize, 5);
