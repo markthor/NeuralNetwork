@@ -54,7 +54,7 @@ public class Evolver {
 		children = 30;
 		elitists = 5;
 		terminalFitness = 1300;
-		terminalGeneration = 2;
+		terminalGeneration = 500;
 		saveInterval = 100;
 	}
 	
@@ -110,6 +110,11 @@ public class Evolver {
 			}
 			System.out.println("Total fitness: " + currentGeneration.totalFitness());
 			System.out.println("Highest fitness: " + currentGeneration.highestFitness());
+			
+			if(numberOfGenerations % saveInterval == 0) {
+				currentGeneration.saveGeneration(elitists);
+			}
+			
 			numberOfGenerations++;
 		} while(currentGeneration.highestFitness() < terminalFitness && currentGeneration.getNumber() < terminalGeneration);
 		currentGeneration.saveGeneration(elitists);

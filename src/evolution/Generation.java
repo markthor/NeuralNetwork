@@ -150,7 +150,7 @@ public class Generation {
 	}
 	
 	public void saveGeneration(int elitistsToSave) {
-		IOManager.saveMultipleGenomesToFile(1, Network.networksToGenomes(getTopNetworksWithHighestFitness(elitistsToSave)));
+		IOManager.saveMultipleGenomesToFile(number, Network.networksToGenomes(getTopNetworksWithHighestFitness(elitistsToSave)));
 		IOManager.saveGenerationToFile(this, number);
 	}
 	
