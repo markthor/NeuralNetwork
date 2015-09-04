@@ -45,9 +45,9 @@ public class Evolver {
 	}
 	
 	private static void setDefaultArgs() {
-		evolve = true;
+		evolve = false;
 		readOld = false;
-		infinity = true;
+		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters
@@ -57,7 +57,7 @@ public class Evolver {
 		children = 30;
 		elitists = 5;
 		terminalFitness = 1300;
-		terminalGeneration = 1;
+		terminalGeneration = 500;
 		saveInterval = 100;
 		initialWeight = 0.0;
 		initialBias = 0.0;
