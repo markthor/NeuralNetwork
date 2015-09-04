@@ -29,6 +29,8 @@ public class Evolver {
 	public static int terminalGeneration;
 	public static int numberOfGenerations;
 	public static int saveInterval;
+	public static double initialWeight;
+	public static double initialBias;
 	
 	/**
 	 * The main method. Several options are listed - simply remove comments to use the option you want.
@@ -56,6 +58,8 @@ public class Evolver {
 		terminalFitness = 1300;
 		terminalGeneration = 2;
 		saveInterval = 100;
+		initialWeight = 0.0;
+		initialBias = 0.0;
 	}
 	
 	private static void startSimulation() {

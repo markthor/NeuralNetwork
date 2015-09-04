@@ -29,6 +29,8 @@ public class CLIParser {
 		options.addOption("tg", "terminal-generation", true, "Terminal generation (int)");
 		options.addOption("h", "help", false, "Show this help message");
 		options.addOption("si", "save-interval", true, "Save every N'th generation to file (int)");
+		options.addOption("w", "weight", true, "Initial weight (double)");
+		options.addOption("b", "bias", true, "Initial bias (double)");
 		
 		try {
 		    // parse the command line arguments
@@ -67,6 +69,12 @@ public class CLIParser {
 		    }
 		    if (line.hasOption("si")) {
 		    	Evolver.saveInterval = Integer.parseInt(line.getOptionValue("si"));
+		    }
+		    if (line.hasOption("w")) {
+		    	Evolver.initialWeight = Double.parseDouble(line.getOptionValue("w"));
+		    }
+		    if (line.hasOption("b")) {
+		    	Evolver.initialBias = Double.parseDouble(line.getOptionValue("b"));
 		    }
 		    if (line.hasOption("h")) {
 		    	// automatically generate and print the help statement
