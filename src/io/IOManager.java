@@ -36,7 +36,10 @@ public class IOManager {
 	}
 	
 	public static void saveGenomeToFile(Genome genome, int generationNumber) {
-		int genomeNumber = 1;
+		saveGenomeToFile(genome, generationNumber, 1);
+	}
+	
+	public static void saveGenomeToFile(Genome genome, int generationNumber, int genomeNumber) {
 		String json = gson.toJson(genome);
 		try {
 			FileUtils.write(new File(getGenomeFileName(generationNumber, genomeNumber)), json);
@@ -46,8 +49,10 @@ public class IOManager {
 	}
 	
 	public static void saveMultipleGenomesToFile(int generationNumber, List<Genome> genomes) {
+		int genomeNumber = 1;
 		for(Genome g: genomes) {
-			saveGenomeToFile(g, generationNumber);
+			saveGenomeToFile(g, generationNumber, genomeNumber);
+			genomeNumber++;
 		}
 	}
 	
