@@ -15,6 +15,9 @@ public class Generation {
 	private Map<Network, Integer> networksWithFitness;
 	private int number;
 
+	/***
+	 * Seeds a generation with multiple parents, each one seeding childrenPerParent children,
+	 */
 	public Generation(int number, List<Network> multipleParents, int childrenPerParent, double chanceOfMutation, double intensity) {
 		List<Network> inputNetworks = new ArrayList<Network>();
 		inputNetworks.addAll(multipleParents);
@@ -28,12 +31,9 @@ public class Generation {
 		constructGeneration(number, inputNetworks);
 	}
 	
-	private Network spawnChild(Network parent, double chanceOfMutation, double intensity) {
-		Genome mutatedGenome = parent.getGenome().clone();
-		mutatedGenome.mutate(chanceOfMutation, intensity);
-		return new Network(mutatedGenome, parent.getSpecies());
-	}
-	
+	/***
+	 * Seeds a generation from a previous generation, selecting the parent stochastically based on fitness and keeping the numberOfElitists best networks unmodified.
+	 */
 	public Generation(int number, Generation lastGeneration, int numberOfNetworks, int numberOfElitists, double chanceOfMutation, double intensity) {
 		List<Network> inputNetworks = new ArrayList<Network>(numberOfNetworks);
 		
@@ -51,6 +51,9 @@ public class Generation {
 		constructGeneration(number, inputNetworks);
 	}
 	
+	/***
+	 * Seeds a generation from a single parent.
+	 */
 	public Generation(int number, Network parent, int numberOfNetworks, double chanceOfMutation, double intensity) {
 		List<Network> inputNetworks = new ArrayList<Network>(numberOfNetworks);
 		for(int i = 0; i < numberOfNetworks-1; i++) {
@@ -64,6 +67,9 @@ public class Generation {
 		constructGeneration(number, inputNetworks);
 	}
 
+	/***
+	 * Seeds a generation from a predefined list of networks.
+	 */
 	public Generation(int number, List<Network> inputNetworks) {
 		constructGeneration(number, inputNetworks);
 	}
@@ -74,6 +80,12 @@ public class Generation {
 		for(Network n: inputNetworks) {
 			networksWithFitness.put(n, -1);
 		}
+	}
+	
+	private Network spawnChild(Network parent, double chanceOfMutation, double intensity) {
+		Genome mutatedGenome = parent.getGenome().clone();
+		mutatedGenome.mutate(chanceOfMutation, intensity);
+		return new Network(mutatedGenome, parent.getSpecies());
 	}
 	
 	public void addFitnessToNetwork(int fitness, Network network) {

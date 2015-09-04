@@ -12,7 +12,7 @@ import adapter.AdvancedNeuralNetworkController;
 import adapter.NeuralNetworkController;
 
 public class Evolver {
-	public final static boolean evolve = true;
+	public final static boolean evolve = false;
 	public final static boolean readOld = false;
 	public final static int readNum = 0;
 	
