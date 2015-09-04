@@ -9,7 +9,6 @@ import network.Network;
 import pacman.Executor;
 import pacman.controllers.examples.StarterGhosts;
 import adapter.AdvancedNeuralNetworkController;
-import adapter.NeuralNetworkController;
 import cli.CLIParser;
 
 
@@ -46,9 +45,9 @@ public class Evolver {
 	}
 	
 	private static void setDefaultArgs() {
-		evolve = false;
+		evolve = true;
 		readOld = false;
-		infinity = false;
+		infinity = true;
 		readGen = 0;
 		
 		// Evolution parameters
@@ -58,7 +57,7 @@ public class Evolver {
 		children = 30;
 		elitists = 5;
 		terminalFitness = 1300;
-		terminalGeneration = 500;
+		terminalGeneration = 1;
 		saveInterval = 100;
 		initialWeight = 0.0;
 		initialBias = 0.0;
@@ -122,7 +121,7 @@ public class Evolver {
 			}
 			
 			numberOfGenerations++;
-		} while(terminate(currentGeneration));
+		} while(!terminate(currentGeneration));
 		currentGeneration.saveGeneration(elitists);
 	}
 	
