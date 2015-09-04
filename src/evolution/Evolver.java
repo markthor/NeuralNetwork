@@ -17,6 +17,7 @@ public class Evolver {
 
 	public static boolean evolve;
 	public static boolean readOld;
+	public static boolean infinity;
 	public static int readGen;
 	
 	// Evolution parameters
@@ -29,6 +30,8 @@ public class Evolver {
 	public static int terminalGeneration;
 	public static int numberOfGenerations;
 	public static int saveInterval;
+	public static double initialWeight;
+	public static double initialBias;
 	
 	/**
 	 * The main method. Several options are listed - simply remove comments to use the option you want.
@@ -45,6 +48,7 @@ public class Evolver {
 	private static void setDefaultArgs() {
 		evolve = false;
 		readOld = false;
+		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters
@@ -56,6 +60,8 @@ public class Evolver {
 		terminalFitness = 1300;
 		terminalGeneration = 500;
 		saveInterval = 100;
+		initialWeight = 0.0;
+		initialBias = 0.0;
 	}
 	
 	private static void startSimulation() {

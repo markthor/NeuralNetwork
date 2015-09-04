@@ -23,12 +23,15 @@ public class CLIParser {
 		options.addOption("s", "hidden-size", true, "Size of the hidden layer (int)");
 		options.addOption("m", "chance", true, "Chance of a mutation (double)");
 		options.addOption("i", "intensity", true, "Intensity of mutation (double)");
+		options.addOption("I", "infinity", false, "Simulation never terminates (ignores terminal fitness and terminal generation)");
 		options.addOption("c", "children", true, "Number of children (int)");
 		options.addOption("E", "elitists", true, "Number of elitists (int)");
 		options.addOption("tf", "terminal-fitness", true, "Terminal fitness (int)");
 		options.addOption("tg", "terminal-generation", true, "Terminal generation (int)");
 		options.addOption("h", "help", false, "Show this help message");
 		options.addOption("si", "save-interval", true, "Save every N'th generation to file (int)");
+		options.addOption("w", "weight", true, "Initial weight (double)");
+		options.addOption("b", "bias", true, "Initial bias (double)");
 		
 		try {
 		    // parse the command line arguments
@@ -40,6 +43,9 @@ public class CLIParser {
 		    }
 		    if (line.hasOption("r")) {
 		    	Evolver.readOld = true;
+		    }
+		    if (line.hasOption("I")) {
+		    	Evolver.infinity = true;
 		    }
 		    if (line.hasOption("g")) {
 		    	Evolver.readGen = Integer.parseInt(line.getOptionValue("g"));
@@ -67,6 +73,12 @@ public class CLIParser {
 		    }
 		    if (line.hasOption("si")) {
 		    	Evolver.saveInterval = Integer.parseInt(line.getOptionValue("si"));
+		    }
+		    if (line.hasOption("w")) {
+		    	Evolver.initialWeight = Double.parseDouble(line.getOptionValue("w"));
+		    }
+		    if (line.hasOption("b")) {
+		    	Evolver.initialBias = Double.parseDouble(line.getOptionValue("b"));
 		    }
 		    if (line.hasOption("h")) {
 		    	// automatically generate and print the help statement
