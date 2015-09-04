@@ -3,6 +3,7 @@ package cli;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -25,7 +26,8 @@ public class CLIParser {
 		options.addOption("c", "children", true, "Number of children (int)");
 		options.addOption("E", "elitists", true, "Number of elitists (int)");
 		options.addOption("tf", "terminal-fitness", true, "Terminal fitness (int)");
-		options.addOption("tg", "terminal-generation", true, "Terminal generation (int");
+		options.addOption("tg", "terminal-generation", true, "Terminal generation (int)");
+		options.addOption("h", "help", false, "Show this help message");
 		
 		try {
 		    // parse the command line arguments
@@ -61,6 +63,12 @@ public class CLIParser {
 		    }
 		    if (line.hasOption("tg")) {
 		    	Evolver.terminalGeneration = Integer.parseInt(line.getOptionValue("tg"));
+		    }
+		    if (line.hasOption("h")) {
+		    	// automatically generate and print the help statement
+		    	HelpFormatter formatter = new HelpFormatter();
+		    	formatter.printHelp( "PacmanANN", options );
+		    	System.exit(0);
 		    }
 		}
 		catch( ParseException exp ) {
