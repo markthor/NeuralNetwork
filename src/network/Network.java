@@ -127,6 +127,10 @@ public class Network {
 	}
 	
 	public String toString() {
+		return "Network with hashcode: " + Integer.toString(hashCode());
+	}
+	
+	public String toRichString() {
 		String result = "";
 		int layer = 1;
 		for(List<Neuron> list: allNeurons) {

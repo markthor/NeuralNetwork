@@ -58,7 +58,7 @@ public class Evolver {
 		children = 30;
 		elitists = 5;
 		terminalFitness = 1300;
-		terminalGeneration = 2;
+		terminalGeneration = 500;
 		saveInterval = 100;
 		initialWeight = 0.0;
 		initialBias = 0.0;
@@ -77,11 +77,10 @@ public class Evolver {
 			}
 			
 			Network network = new Network(genome, species);
-			
 			List<Network> networks = new ArrayList<Network>();
 			networks.add(network);
 			Generation generation = new Generation(0, networks);
-			NeuralNetworkController controller = new NeuralNetworkController(network);
+			AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(network);
 			controller.setCurrentGeneration(generation);
 			
 			exec.runGameTimed(controller,new StarterGhosts(),true);
@@ -91,8 +90,8 @@ public class Evolver {
 	}
 	
 	private static void evolutionLoop() {
+		numberOfGenerations = 1;
 		Species species = new Species(25, hiddenSize, 5);
-		//Specipes species = new Species(4, 4, 4);
 		Genome currentGenome;
 		if (readOld) {
 			currentGenome = IOManager.readGenomeNumber(1,1);
@@ -103,7 +102,6 @@ public class Evolver {
 		Generation currentGeneration = new Generation(numberOfGenerations, currentNetwork, children, chanceOfMutation, intensity);
 		currentGeneration.evenAllFitnessValues();
 		AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(currentNetwork);
-		//SimpleNeuralNetworkController controller = new SimpleNeuralNetworkController(currentNetwork);
 		
 		Executor exec = new Executor();
 		
@@ -116,11 +114,15 @@ public class Evolver {
 				controller.setNetwork(currentGeneration.getNetwork(i));
 				exec.runGame(controller,new StarterGhosts(),false, 0);
 			}
-			
 			System.out.println("Total fitness: " + currentGeneration.totalFitness());
 			System.out.println("Highest fitness: " + currentGeneration.highestFitness());
+			
+			if(numberOfGenerations % saveInterval == 0) {
+				currentGeneration.saveGeneration(elitists);
+			}
+			
 			numberOfGenerations++;
 		} while(currentGeneration.highestFitness() < terminalFitness && currentGeneration.getNumber() < terminalGeneration);
-		IOManager.saveMultipleGenomesToFile(1, Network.networksToGenomes(currentGeneration.getTopNetworksWithHighestFitness(elitists)));
+		currentGeneration.saveGeneration(elitists);
 	}
 }
