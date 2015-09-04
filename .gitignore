@@ -2,3 +2,6 @@
 *.jar
 *.classpath
 *.project
+*.json
+bin/
+.settings/
