@@ -10,21 +10,24 @@ import pacman.Executor;
 import pacman.controllers.examples.StarterGhosts;
 import adapter.AdvancedNeuralNetworkController;
 import adapter.NeuralNetworkController;
+import cli.CLIParser;
+
 
 public class Evolver {
-	public final static boolean evolve = false;
-	public final static boolean readOld = false;
-	public final static int readNum = 0;
+
+	public static boolean evolve;
+	public static boolean readOld;
+	public static int readGen;
 	
 	// Evolution parameters
-	public static int hiddenSize = 20;
-	public static int numberOfGenerations = 0;
-	public static double chanceOfMutation = 0.0517;
-	public static double intensity = 0.443;
-	public static int children = 30;
-	public static int elitists = 5;
-	public static int terminalFitness = 1300;
-	public static int terminalGeneration = 2;
+	public static int hiddenSize;
+	public static double chanceOfMutation;
+	public static double intensity;
+	public static int children;
+	public static int elitists;
+	public static int terminalFitness;
+	public static int terminalGeneration;
+	public static int numberOfGenerations;
 	
 	/**
 	 * The main method. Several options are listed - simply remove comments to use the option you want.
@@ -33,9 +36,30 @@ public class Evolver {
 	 */
 	public static void main(String[] args)
 	{
-		//HVA SÅ BETON
+		setDefaultArgs();
+		CLIParser.readArgs(args);
+		startSimulation();
+	}
+	
+	private static void setDefaultArgs() {
+		evolve = false;
+		readOld = false;
+		readGen = 0;
+		
+		// Evolution parameters
+		hiddenSize = 20;
+		chanceOfMutation = 0.0517;
+		intensity = 0.443;
+		children = 30;
+		elitists = 5;
+		terminalFitness = 1300;
+		terminalGeneration = 2;
+	}
+	
+	private static void startSimulation() {
 		Executor exec=new Executor();
 		if (!evolve) {
+			numberOfGenerations = 1;
 			Species species = new Species(25, hiddenSize, 5);
 			Genome genome = IOManager.readGenomeNumber(0);
 			Network network = new Network(genome, species);
@@ -57,7 +81,7 @@ public class Evolver {
 		//Specipes species = new Species(4, 4, 4);
 		Genome currentGenome;
 		if (readOld) {
-			currentGenome = IOManager.readGenomeNumber(readNum);
+			currentGenome = IOManager.readGenomeNumber(readGen);
 		} else {
 			currentGenome = new Genome(species, 0, 0);
 		}
