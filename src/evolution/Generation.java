@@ -1,5 +1,7 @@
 package evolution;
 
+import io.IOManager;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -145,6 +147,11 @@ public class Generation {
 		for(Entry<Network, Integer> nf: networksWithFitness.entrySet()) {
 			addFitnessToNetwork(1, nf.getKey());
 		}
+	}
+	
+	public void saveGeneration(int elitistsToSave) {
+		IOManager.saveMultipleGenomesToFile(1, Network.networksToGenomes(getTopNetworksWithHighestFitness(elitistsToSave)));
+		IOManager.saveGenerationToFile(this, number);
 	}
 	
 	private boolean isIncludedInInterval(int input, int lower, int upper) {
