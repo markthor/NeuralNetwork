@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import evolution.Genome;
 
 public class IOManager {
+	private static String genomeFilePath = "genomes" + System.getProperty("file.separator");
 	private static String genomeFileName = "genome";
 	private static String genomeFileExtension = ".json";
 	private static Gson gson = new Gson();
@@ -44,6 +45,6 @@ public class IOManager {
 	}
 	
 	private static String getFileName(int number) {
-		return genomeFileName + number + genomeFileExtension;
+		return genomeFilePath + genomeFileName + number + genomeFileExtension;
 	}
 }
