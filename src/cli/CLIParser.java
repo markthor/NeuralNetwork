@@ -33,7 +33,7 @@ public class CLIParser {
 	private static final String[] ARG11 = {"tf", "terminal-fitness", "Terminate program at N fitness (int)"};
 	private static final String[] ARG12 = {"tg", "terminal-generation", "Terminate program after N generations (int)"};
 	private static final String[] ARG13 = {"si", "save-interval", "Save every N'th generation to file (int)"};
-	private static final String[] ARG14 = {"G", "num-genome", "Number of genomes to save at each save (Should not exceed generation-size) (int)"};
+	private static final String[] ARG14 = {"p", "parents", "Number of parents used for seeding each generation (int)"};
 	private static final String[] ARG15 = {"C", "child-evaluations", "Number of evaluations per child (Increase to reduce RNG-noise) (int)"};
 	private static final String[] ARG16 = {"sel", "selection", "Criteria for selecting seeds for new generations. Options: byRank, ByFitness, Fittest"};
 	private static final String[] ARG17 = {"sc", "spawn", "Criteria for spawning seeds for new generations. Options: mutation, crossover"};
@@ -147,7 +147,7 @@ public class CLIParser {
 		    	usedArgs.add(ARG13[0]);
 		    }
 		    if (line.hasOption(ARG14[0])) {
-		    	Evolver.numberOfGenomesToSave = Integer.parseInt(line.getOptionValue(ARG14[0]));
+		    	Evolver.parents = Integer.parseInt(line.getOptionValue(ARG14[0]));
 		    	usedArgs.add(ARG14[0]);
 		    }
 		    if (line.hasOption(ARG15[0])) {
@@ -258,8 +258,69 @@ public class CLIParser {
 	}
 	
 	private static void printArgs(ArrayList<String> argList) {
+		/*
+		 * The second string begins after 40 characters. The dash means that the
+		 * first string is left-justified.
+		 */
+		String format = "%-40s%s%n";
+		
 		if (argList.contains(ARG1[0])) {
-			System.out.println("-" + ARG1[0]);
+			System.out.printf(format, "-" + ARG1[0], Evolver.evolve);
 		}
+		if (argList.contains(ARG2[0])) {
+			System.out.printf(format, "-" + ARG2[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG3[0])) {
+			System.out.printf(format, "-" + ARG3[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG4[0])) {
+			System.out.printf(format, "-" + ARG4[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG5[0])) {
+			System.out.printf(format, "-" + ARG5[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG6[0])) {
+			System.out.printf(format, "-" + ARG6[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG7[0])) {
+			System.out.printf(format, "-" + ARG7[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG8[0])) {
+			System.out.printf(format, "-" + ARG8[0], Evolver.evolve);
+		}
+		if (argList.contains(ARG9[0])) {
+			System.out.printf(format, "-" + ARG9[0], Evolver.evolve);
+		}
+	/*	if (argList.contains(ARG10[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG11[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG12[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG13[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG14[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG15[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG16[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG17[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG18[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}
+		if (argList.contains(ARG19[0])) {
+			System.out.printf(format, "-" + ARG1[0], Evolver.);
+		}*/
+		
 	}
 }
