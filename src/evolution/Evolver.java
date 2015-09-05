@@ -9,7 +9,6 @@ import java.util.List;
 import network.Network;
 import pacman.Executor;
 import pacman.controllers.Controller;
-import pacman.controllers.examples.AggressiveGhosts;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -38,6 +37,7 @@ public class Evolver {
 	public static int numberOfGenerations;
 	public static int saveInterval;
 	public static int numberOfEvaluationsPerChild;
+	public static int numberOfGenomesToSave;
 	public static double initialWeight;
 	public static double initialBias;
 	
@@ -62,7 +62,7 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 		evolve = true;
-		readOld = true;
+		readOld = false;
 		infinity = true;
 		readGen = 0;
 		
@@ -72,11 +72,12 @@ public class Evolver {
 		intensity = 0.1;
 		crossoverProbability = 0.2;
 		sizeOfGeneration = 35;
-		elitists = 4;
+		elitists = 0;
 		parents = 6;
 		terminalFitness = 1300;
 		terminalGeneration = 500;
 		saveInterval = 100;
+		numberOfGenomesToSave = parents;
 		initialWeight = 0.1;
 		initialBias = 0.1;
 		numberOfEvaluationsPerChild = 3;
@@ -170,7 +171,7 @@ public class Evolver {
 			
 			numberOfGenerations++;
 		} while(keepEvolving(currentGeneration));
-		currentGeneration.saveGeneration(elitists);
+		currentGeneration.saveGeneration(numberOfGenomesToSave);
 	}
 	
 	private static boolean keepEvolving(Generation generation) {
