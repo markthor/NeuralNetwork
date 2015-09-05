@@ -151,8 +151,8 @@ public class Network {
 		return result;
 	}
 	
-	@Override
-	public int hashCode() {
-		return genome.hashCode();
-	}
+//	@Override
+//	public int hashCode() {
+//		return genome.hashCode();
+//	}
 }

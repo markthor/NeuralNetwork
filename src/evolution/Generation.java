@@ -202,27 +202,19 @@ public class Generation {
 		throw new IllegalStateException("Should not happen, revise code");
 	}
 	
+	private boolean isIncludedInInterval(double input, double lower, double upper) {
+		return input >= lower && input <= upper;
+	}
+	
 	public void evenAllFitnessValues() {
 		for(Entry<Network, Evaluation> ne: networksWithFitness.entrySet()) {
 			addFitnessToNetwork(1, 1, ne.getKey());
 		}
 	}
 	
-	public void saveGeneration(int elitistsToSave) {
-		IOManager.saveMultipleGenomesToFile(number, Network.networksToGenomes(getTopNetworksWithHighestFitness(elitistsToSave)));
+	public void saveGeneration() {
+		IOManager.saveMultipleGenomesToFile(number, Network.networksToGenomes(getTopNetworksWithHighestFitness(getSize())));
 		IOManager.saveGenerationToFile(this, number);
-	}
-	
-	private boolean isIncludedInInterval(double input, double lower, double upper) {
-		return input >= lower && input <= upper;
-	}
-	
-	public List<Network> getNetworks() {
-		return new ArrayList<Network>(Arrays.asList(networksWithFitness.keySet().toArray(new Network[0])));
-	}
-	
-	public Network getNetwork(int index) {
-		return getNetworks().get(index);
 	}
 	
 	public double highestFitness() {
@@ -241,14 +233,26 @@ public class Generation {
 		return ((double) totalFitness()) / ((double) getNetworks().size());
 	}
 	
+	public int getSize() {
+		return networksWithFitness.size();
+	}
+
+	public List<Network> getNetworks() {
+		return new ArrayList<Network>(Arrays.asList(networksWithFitness.keySet().toArray(new Network[0])));
+	}
+	
+	public Network getNetwork(int index) {
+		return getNetworks().get(index);
+	}
+	
 	public int getNumber() {
 		return number;
 	}
 	
-	@Override
-	public String toString() {
-		return "Generation number: " + number + "\n" + networksWithFitness;
-	}
+//	@Override
+//	public String toString() {
+//		return "Generation number: " + number + "\n" + networksWithFitness;
+//	}
 	
 	private class Evaluation implements Comparable<Evaluation> {
 		private Map<Integer, Integer> fitnessPerTry;
