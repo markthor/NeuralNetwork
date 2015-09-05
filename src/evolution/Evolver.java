@@ -9,7 +9,12 @@ import network.Network;
 import pacman.Executor;
 import pacman.controllers.examples.StarterGhosts;
 import adapter.AdvancedNeuralNetworkController;
+<<<<<<< HEAD
 import adapter.BlamBlamNeuralNetworkController;
+=======
+import adapter.EvaluationNeuralNetworkController;
+import adapter.NeuralNetworkController;
+>>>>>>> branch 'master' of https://github.com/markthor/NeuralNetwork.git
 import cli.CLIParser;
 
 
@@ -34,6 +39,9 @@ public class Evolver {
 	public static double initialWeight;
 	public static double initialBias;
 	
+	public static NeuralNetworkController controller;
+	public static Species species;
+	
 	/**
 	 * The main method. Several options are listed - simply remove comments to use the option you want.
 	 *
@@ -48,12 +56,12 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 		evolve = false;
-		readOld = false;
+		readOld = true;
 		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters
-		hiddenSize = 20;
+		hiddenSize = 18;
 		chanceOfMutation = 0.0517;
 		intensity = 0.443;
 		children = 30;
@@ -64,14 +72,16 @@ public class Evolver {
 		saveInterval = 100;
 		initialWeight = 0.0;
 		initialBias = 0.0;
+		
+		species = new Species(16, hiddenSize, 4);
+		controller = new BlamBlamNeuralNetworkController(null);
 	}
 	
 	private static void startSimulation() {
 		Executor exec=new Executor();
 		if (!evolve) {
 			numberOfGenerations = 1;
-			//Species species = new Species(25, hiddenSize, 5);
-			Species species = new Species(11, hiddenSize, 4);
+
 			Genome genome;
 			if(readOld) {
 				genome = IOManager.readGenomesFromLatestGeneration().get(0);
@@ -83,8 +93,9 @@ public class Evolver {
 			List<Network> networks = new ArrayList<Network>();
 			networks.add(network);
 			Generation generation = new Generation(0, networks);
-			//AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(network);
-			BlamBlamNeuralNetworkController controller = new BlamBlamNeuralNetworkController(network);
+
+			controller.setNetwork(network);
+
 			controller.setCurrentGeneration(generation);
 			
 			exec.runGameTimed(controller,new StarterGhosts(),true);
@@ -95,7 +106,6 @@ public class Evolver {
 	
 	private static void evolutionLoop() {
 		numberOfGenerations = 1;
-		Species species = new Species(25, hiddenSize, 5);
 		Genome currentGenome;
 		Generation currentGeneration;
 		Network currentNetwork;
@@ -113,7 +123,6 @@ public class Evolver {
 		}
 		
 		currentGeneration.evenAllFitnessValues();
-		AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(null);
 		
 		Executor exec = new Executor();
 		
@@ -142,5 +151,9 @@ public class Evolver {
 		if(infinity) return true;
 		if(generation.highestFitness() < terminalFitness && generation.getNumber() < terminalGeneration) return true;
 		return false;
+	}
+	
+	private static void setSpeciesAndControllerToEvaluationBased(Species species, NeuralNetworkController controller) {
+
 	}
 }

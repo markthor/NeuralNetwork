@@ -57,7 +57,7 @@ public class NeuralNetworkController extends Controller<MOVE> {
 		
 	}
 		
-	private void addZeroOrOneToInput(List<Double> input, List<MOVE> possibleMoves, MOVE expectedMove) {
+	protected void addZeroOrOneToInput(List<Double> input, List<MOVE> possibleMoves, MOVE expectedMove) {
 		if(possibleMoves.contains(expectedMove)) {
 			input.add(1.0);
 		} else {
