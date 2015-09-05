@@ -8,13 +8,8 @@ import java.util.List;
 import network.Network;
 import pacman.Executor;
 import pacman.controllers.examples.StarterGhosts;
-import adapter.AdvancedNeuralNetworkController;
-<<<<<<< HEAD
 import adapter.BlamBlamNeuralNetworkController;
-=======
-import adapter.EvaluationNeuralNetworkController;
 import adapter.NeuralNetworkController;
->>>>>>> branch 'master' of https://github.com/markthor/NeuralNetwork.git
 import cli.CLIParser;
 
 
