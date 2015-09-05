@@ -9,6 +9,7 @@ import network.Network;
 import pacman.Executor;
 import pacman.controllers.examples.StarterGhosts;
 import adapter.AdvancedNeuralNetworkController;
+import adapter.BlamBlamNeuralNetworkController;
 import cli.CLIParser;
 
 
@@ -69,7 +70,8 @@ public class Evolver {
 		Executor exec=new Executor();
 		if (!evolve) {
 			numberOfGenerations = 1;
-			Species species = new Species(25, hiddenSize, 5);
+			//Species species = new Species(25, hiddenSize, 5);
+			Species species = new Species(11, hiddenSize, 4);
 			Genome genome;
 			if(readOld) {
 				genome = IOManager.readGenomesFromLatestGeneration().get(0);
@@ -81,7 +83,8 @@ public class Evolver {
 			List<Network> networks = new ArrayList<Network>();
 			networks.add(network);
 			Generation generation = new Generation(0, networks);
-			AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(network);
+			//AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(network);
+			BlamBlamNeuralNetworkController controller = new BlamBlamNeuralNetworkController(network);
 			controller.setCurrentGeneration(generation);
 			
 			exec.runGameTimed(controller,new StarterGhosts(),true);
