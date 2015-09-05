@@ -24,6 +24,7 @@ public class Evolver {
 	public static double chanceOfMutation;
 	public static double intensity;
 	public static int children;
+	public static int childrenPerParent;
 	public static int elitists;
 	public static int terminalFitness;
 	public static int terminalGeneration;
@@ -55,6 +56,7 @@ public class Evolver {
 		chanceOfMutation = 0.0517;
 		intensity = 0.443;
 		children = 30;
+		childrenPerParent = 8;
 		elitists = 5;
 		terminalFitness = 1300;
 		terminalGeneration = 500;
@@ -70,7 +72,7 @@ public class Evolver {
 			Species species = new Species(25, hiddenSize, 5);
 			Genome genome;
 			if(readOld) {
-				genome = IOManager.readGenome(1,1);
+				genome = IOManager.readGenomesFromLatestGeneration().get(0);
 			} else {
 				genome = new Genome(species, 0, 0);
 			}
@@ -92,15 +94,23 @@ public class Evolver {
 		numberOfGenerations = 1;
 		Species species = new Species(25, hiddenSize, 5);
 		Genome currentGenome;
+		Generation currentGeneration;
+		Network currentNetwork;
 		if (readOld) {
-			currentGenome = IOManager.readGenome(1, 1);
+			int latestGenerationNumber = IOManager.getLatestGenerationNumber();
+			List<Genome> latestGenomes;
+			latestGenomes = IOManager.readGenomesFromLatestGeneration();
+			currentGeneration = new Generation(latestGenerationNumber, Network.genomesToNetwork(latestGenomes, species), childrenPerParent, chanceOfMutation, intensity);
+			children = childrenPerParent * latestGenomes.size();
+			numberOfGenerations = latestGenerationNumber;
 		} else {
 			currentGenome = new Genome(species, initialWeight, initialBias);
+			currentNetwork = new Network(currentGenome, species);
+			currentGeneration = new Generation(numberOfGenerations, currentNetwork, children, chanceOfMutation, intensity);
 		}
-		Network currentNetwork = new Network(currentGenome, species);
-		Generation currentGeneration = new Generation(numberOfGenerations, currentNetwork, children, chanceOfMutation, intensity);
+		
 		currentGeneration.evenAllFitnessValues();
-		AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(currentNetwork);
+		AdvancedNeuralNetworkController controller = new AdvancedNeuralNetworkController(null);
 		
 		Executor exec = new Executor();
 		
@@ -121,12 +131,12 @@ public class Evolver {
 			}
 			
 			numberOfGenerations++;
-		} while(!terminate(currentGeneration));
+		} while(keepEvolving(currentGeneration));
 		currentGeneration.saveGeneration(elitists);
 	}
 	
-	private static boolean terminate(Generation generation) {
-		if(infinity) return false;
+	private static boolean keepEvolving(Generation generation) {
+		if(infinity) return true;
 		if(generation.highestFitness() < terminalFitness && generation.getNumber() < terminalGeneration) return true;
 		return false;
 	}

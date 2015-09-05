@@ -126,6 +126,14 @@ public class Network {
 		return result;
 	}
 	
+	public static List<Network> genomesToNetwork(List<Genome> genomes, Species species) {
+		List<Network> result = new ArrayList<Network>();
+		for(Genome g: genomes) {
+			result.add(new Network(g, species));
+		}
+		return result;
+	}
+	
 	public String toString() {
 		return "Network with hashcode: " + Integer.toString(hashCode());
 	}

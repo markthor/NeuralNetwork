@@ -1,5 +1,7 @@
 package controller;
 
+import io.IOManager;
+
 import java.util.ArrayList;
 
 import tools.MathTool;
@@ -10,31 +12,32 @@ import evolution.Species;
 
 public class Executor {
 	public static void main(String args[]) {
-		Species s = new Species(1, 1, 1);
-		Genome g1 = new Genome(s, 0, 0);
-		Genome g2 = new Genome(s, 1, 1);
-		Genome g3 = new Genome(s, 2, 2);
-		Network n1 = new Network(g1, s);
-		Network n2 = new Network(g2, s);
-		Network n3 = new Network(g3, s);
-		
-		ArrayList<Network> arrayList = new ArrayList<Network>();
-		arrayList.add(n1);
-		arrayList.add(n2);
-		arrayList.add(n3);
-		
-		Generation gen = new Generation(0, arrayList);
-		gen.addFitnessToNetwork(6, n1);
-		gen.addFitnessToNetwork(4, n2);
-		gen.addFitnessToNetwork(7, n3);
-		System.out.println(gen.getTopNetworksWithHighestFitness(2));
-		
-		double intesity = 0.3;
-		
-		System.out.println(MathTool.getNormalDistribution()*intesity);
-		System.out.println(MathTool.getNormalDistribution()*intesity);
-		System.out.println(MathTool.getNormalDistribution()*intesity);
-		System.out.println(MathTool.getNormalDistribution()*intesity);
+
+//		Species s = new Species(1, 1, 1);
+//		Genome g1 = new Genome(s, 0, 0);
+//		Genome g2 = new Genome(s, 1, 1);
+//		Genome g3 = new Genome(s, 2, 2);
+//		Network n1 = new Network(g1, s);
+//		Network n2 = new Network(g2, s);
+//		Network n3 = new Network(g3, s);
+//		
+//		ArrayList<Network> arrayList = new ArrayList<Network>();
+//		arrayList.add(n1);
+//		arrayList.add(n2);
+//		arrayList.add(n3);
+//		
+//		Generation gen = new Generation(0, arrayList);
+//		gen.addFitnessToNetwork(6, n1);
+//		gen.addFitnessToNetwork(4, n2);
+//		gen.addFitnessToNetwork(7, n3);
+//		System.out.println(gen.getTopNetworksWithHighestFitness(2));
+//		
+//		double intesity = 0.3;
+//		
+//		System.out.println(MathTool.getNormalDistribution()*intesity);
+//		System.out.println(MathTool.getNormalDistribution()*intesity);
+//		System.out.println(MathTool.getNormalDistribution()*intesity);
+//		System.out.println(MathTool.getNormalDistribution()*intesity);
 		
 //		Species species = new Species(1, 2, 1);
 //		Genome genome = new Genome(species, 0, 0);
