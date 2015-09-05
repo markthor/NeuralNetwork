@@ -36,7 +36,7 @@ public class AdvancedNeuralNetworkController extends NeuralNetworkController {
 		fillWithZeroOrOne(input, game.isGhostEdible(GHOST.PINKY));
 		fillWithZeroOrOne(input, game.isGhostEdible(GHOST.SUE));
 		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getJunctionIndices(), DM.MANHATTAN), game);
-		
+		game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN);
 		return input;
 	}
 }
