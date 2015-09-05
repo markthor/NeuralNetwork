@@ -61,9 +61,9 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 
-		evolve = true;
-		readOld = true;
-		infinity = true;
+		evolve = false;
+		readOld = false;
+		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters
