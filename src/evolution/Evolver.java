@@ -35,9 +35,7 @@ public class Evolver {
 	public static int parents;
 	public static int terminalFitness;
 	public static int terminalGeneration;
-	public static int numberOfGenerations;
 	public static int saveInterval;
-	public static int numberOfGenomesToSave;
 	public static int numberOfEvaluationsPerChild;
 	public static double initialWeight;
 	public static double initialBias;
@@ -79,7 +77,6 @@ public class Evolver {
 		terminalFitness = 1300;
 		terminalGeneration = 500;
 		saveInterval = 100;
-		numberOfGenomesToSave = 5;
 		initialWeight = 0.0;
 		initialBias = 0.0;
 		numberOfEvaluationsPerChild = 3;
@@ -97,7 +94,7 @@ public class Evolver {
 	private static void startSimulation() {
 		Executor exec=new Executor();
 		if (!evolve) {
-			numberOfGenerations = 1;
+			int numberOfGenerations = 1;
 
 			Genome genome;
 			if(readOld) {
@@ -126,7 +123,7 @@ public class Evolver {
 	
 	private static void evolutionLoop() {
 		System.out.println("Beginning evolution...");
-		numberOfGenerations = 1;
+		int numberOfGenerations = 1;
 		Genome currentGenome;
 		Generation currentGeneration;
 		Network currentNetwork;
