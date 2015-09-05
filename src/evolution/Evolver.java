@@ -36,7 +36,6 @@ public class Evolver {
 	public static int terminalFitness;
 	public static int terminalGeneration;
 	public static int saveInterval;
-	public static int numberOfGenomesToSave;
 	public static int numberOfEvaluationsPerChild;
 	public static double initialWeight;
 	public static double initialBias;
@@ -63,32 +62,31 @@ public class Evolver {
 	private static void setDefaultArgs() {
 
 		evolve = true;
-		readOld = false;
+		readOld = true;
 		infinity = true;
 		readGen = 0;
 		
 		// Evolution parameters
-		hiddenSize = 10;
-		mutationProbability = 0.1;
-		intensity = 0.1;
+		hiddenSize = 8;
+		mutationProbability = 0.08;
+		intensity = 0.2;
 		crossoverProbability = 0.2;
 		sizeOfGeneration = 35;
-		elitists = 0;
-		parents = 6;
+		elitists = 5;
+		parents = 2;
 		terminalFitness = 1300;
 		terminalGeneration = 500;
 		saveInterval = 100;
-		numberOfGenomesToSave = parents;
 		initialWeight = 0.0;
 		initialBias = 0.0;
 		numberOfEvaluationsPerChild = 3;
 		
 		selection = SelectionCriteria.StochasticallyBasedOnRank;
-		spawn = SpawnCriteria.Crossover;
+		spawn = SpawnCriteria.Mutation;
 
 //		species = new Species(16, hiddenSize, 4);
 //		controller = new BlamBlamNeuralNetworkController(null);
-		species = new Species(12, hiddenSize, 4);
+		species = new Species(14, hiddenSize, 4);
 		controller = new EvaluationNeuralNetworkController(null);
 		ghostController = new StarterGhosts();
 	}
@@ -129,49 +127,53 @@ public class Evolver {
 		Genome currentGenome;
 		Generation currentGeneration;
 		Network currentNetwork;
-		if (readOld) {
-			int latestGenerationNumber = IOManager.getLatestGenerationNumber();
-			List<Genome> latestGenomes;
-			if(readGen != 0) {
-				latestGenomes = IOManager.readMultipleGenomes(readGen);
-			}
-			latestGenomes = IOManager.readGenomesFromLatestGeneration();
-			currentGeneration = new Generation(latestGenerationNumber, Network.genomesToNetwork(latestGenomes, species), sizeOfGeneration, mutationProbability, intensity);
-			numberOfGenerations = latestGenerationNumber;
-		} else {
-			currentGenome = new Genome(species, initialWeight, initialBias);
-			currentNetwork = new Network(currentGenome, species);
-			currentGeneration = new Generation(numberOfGenerations, currentNetwork, sizeOfGeneration, mutationProbability, intensity);
-		}
-		
+		currentGenome = new Genome(species, initialWeight, initialBias);
+		currentNetwork = new Network(currentGenome, species);
+		currentGeneration = new Generation(numberOfGenerations, currentNetwork, sizeOfGeneration, mutationProbability, intensity);
 		currentGeneration.evenAllFitnessValues();
 		
-		Executor exec = new Executor();
-		
+		boolean firstRun = true;
 		do {
-			currentGeneration = new Generation(numberOfGenerations, sizeOfGeneration, elitists, parents, currentGeneration, selection, spawn, mutationProbability, intensity, crossoverProbability);
-			controller.setCurrentGeneration(currentGeneration);
-			
-			for(int i = 0; i < sizeOfGeneration; i++) {
-				controller.setNetwork(currentGeneration.getNetwork(i));
-				controller.resetNumberOfTries();
-				for(int j = 0; j < numberOfEvaluationsPerChild; j++) {
-					exec.runGame(controller,ghostController,false, 0);
-					controller.incrementNumberOfTries();
+			if(readOld && firstRun) {
+				if(readGen == 0) {
+					numberOfGenerations = IOManager.getLatestGenerationNumber();
+					currentGeneration = new Generation(numberOfGenerations, Network.genomesToNetwork(IOManager.readGenomesFromLatestGeneration(), species));
+				} else {
+					numberOfGenerations = readGen;
+					currentGeneration = new Generation(numberOfGenerations, Network.genomesToNetwork(IOManager.readMultipleGenomes(numberOfGenerations), species));
 				}
-				
-			}
-			System.out.println("Generation: " + numberOfGenerations);
-			System.out.println("Average fitness: " + currentGeneration.averageFitness());
-			System.out.println("Highest fitness: " + currentGeneration.highestFitness());
-			
-			if(numberOfGenerations % saveInterval == 0) {
-				currentGeneration.saveGeneration(elitists);
+			} else {
+				currentGeneration = new Generation(numberOfGenerations, sizeOfGeneration, elitists, parents, currentGeneration, selection, spawn, mutationProbability, intensity, crossoverProbability);
 			}
 			
+			evaluateGeneration(currentGeneration, controller);
+			
+			if(numberOfGenerations % saveInterval == 0) currentGeneration.saveGeneration();
+			
+			printStatusToTerminal(currentGeneration);
 			numberOfGenerations++;
+			firstRun = false;
 		} while(keepEvolving(currentGeneration));
-		currentGeneration.saveGeneration(numberOfGenomesToSave);
+		currentGeneration.saveGeneration();
+	}
+	
+	private static void evaluateGeneration(Generation currentGeneration, NeuralNetworkController controller) {
+		controller.setCurrentGeneration(currentGeneration);
+		for(int i = 0; i < currentGeneration.getSize(); i++) {
+			controller.setNetwork(currentGeneration.getNetwork(i));
+			controller.resetNumberOfTries();
+			for(int j = 0; j < numberOfEvaluationsPerChild; j++) {
+				Executor exec = new Executor();
+				exec.runGame(controller,ghostController,false, 0);
+				controller.incrementNumberOfTries();
+			}
+		}
+	}
+	
+	private static void printStatusToTerminal(Generation currentGeneration) {
+		System.out.println("Generation: " + currentGeneration.getNumber());
+		System.out.println("Average fitness: " + currentGeneration.averageFitness());
+		System.out.println("Highest fitness: " + currentGeneration.highestFitness());
 	}
 	
 	private static boolean keepEvolving(Generation generation) {

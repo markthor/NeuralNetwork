@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.math3.exception.ZeroException;
+
 import network.Network;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
+import pacman.game.internal.Ghost;
 
 public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 	
@@ -25,37 +28,120 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 	private List<Double> getInputFromGameState(Game game) {
 		List<Double> input = new ArrayList<Double>();
 		fillWithPossibleMoves(input, game);
-		fillWithEvaluationOfNeighbouringNodes(input, game);
+		fillWithEvaluationOfNeighbouringNodesActivePills(input, game);
+		fillWithEvaluationOfNeighbouringNodesGhosts(input, game);
+		input.add(1.0-evaluatePositionGhost(game.getPacmanCurrentNodeIndex(), game));
+		fillWithZeroOrOne(input, isNearestGhostEdible(game));
 		
 		return input;
 	}
 	
-	public void fillWithEvaluationOfNeighbouringNodes(List<Double> input, Game game) {
-		Double[] result = new Double[8];
+	public void fillWithEvaluationOfNeighbouringNodesActivePills(List<Double> input, Game game) {
+		Double[] result = new Double[4];
 		for(int i = 0; i < result.length; i++) {
 			result[i] = new Double(0.0);
 		}
+		
 		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+		double highestEvaluation = -1;
+		int neighbourWithHighestEvaluation = 0;
 		for(int neighbourIndex: neighbours) {
-			switch(game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), neighbourIndex)) {
-				case RIGHT: result[0] = evaluatePositionActivePills(neighbourIndex, game);
-							result[1] = evaluatePositionGhost(neighbourIndex, game);
-							break;
-				case LEFT:  result[2] = evaluatePositionActivePills(neighbourIndex, game);
-							result[3] = evaluatePositionGhost(neighbourIndex, game);
-							break;
-				case UP: 	result[4] = evaluatePositionActivePills(neighbourIndex, game);
-							result[5] = evaluatePositionGhost(neighbourIndex, game);
-							break;
-				case DOWN:  result[6] = evaluatePositionActivePills(neighbourIndex, game);
-							result[7] = evaluatePositionGhost(neighbourIndex, game);
-							break;
-				case NEUTRAL:
-							throw new IllegalStateException("Should not happen, revise code");
+			double evaluation = evaluatePositionActivePills(neighbourIndex, game);
+			if(evaluation > highestEvaluation) {
+				neighbourWithHighestEvaluation = neighbourIndex;
+				highestEvaluation = evaluation;
 			}
 		}
+		
+		if(highestEvaluation == -1) {
+			throw new IllegalStateException("Should not happen, revise code");
+		}
+		
+		switch (game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), neighbourWithHighestEvaluation)) {
+		case RIGHT:
+			result[0] = 1.0;
+		case LEFT:
+			result[1] = 1.0;
+			break;
+		case UP:
+			result[2] = 1.0;
+			break;
+		case DOWN:
+			result[3] = 1.0;
+			break;
+		case NEUTRAL:
+			throw new IllegalStateException("Should not happen, revise code");
+		}
+		
 		input.addAll(new ArrayList<Double>(Arrays.asList(result)));
 	}
+	
+	public void fillWithEvaluationOfNeighbouringNodesGhosts(List<Double> input, Game game) {
+		Double[] result = new Double[4];
+		for(int i = 0; i < result.length; i++) {
+			result[i] = new Double(0.0);
+		}
+		
+		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+		double highestEvaluation = -1;
+		int neighbourWithHighestEvaluation = 0;
+		for(int neighbourIndex: neighbours) {
+			double evaluation = evaluatePositionGhost(neighbourIndex, game);
+			if(evaluation > highestEvaluation) {
+				neighbourWithHighestEvaluation = neighbourIndex;
+				highestEvaluation = evaluation;
+			}
+		}
+		
+		if(highestEvaluation == -1) {
+			throw new IllegalStateException("Should not happen, revise code");
+		}
+		
+		switch (game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), neighbourWithHighestEvaluation)) {
+		case RIGHT:
+			result[0] = 1.0;
+		case LEFT:
+			result[1] = 1.0;
+			break;
+		case UP:
+			result[2] = 1.0;
+			break;
+		case DOWN:
+			result[3] = 1.0;
+			break;
+		case NEUTRAL:
+			throw new IllegalStateException("Should not happen, revise code");
+		}
+		
+		input.addAll(new ArrayList<Double>(Arrays.asList(result)));
+	}
+	
+//	public void fillWithEvaluationOfNeighbouringNodes(List<Double> input, Game game) {
+//		Double[] result = new Double[8];
+//		for(int i = 0; i < result.length; i++) {
+//			result[i] = new Double(0.0);
+//		}
+//		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+//		for(int neighbourIndex: neighbours) {
+//			switch(game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), neighbourIndex)) {
+//				case RIGHT: result[0] = evaluatePositionActivePills(neighbourIndex, game);
+//							result[1] = evaluatePositionGhost(neighbourIndex, game);
+//							break;
+//				case LEFT:  result[2] = evaluatePositionActivePills(neighbourIndex, game);
+//							result[3] = evaluatePositionGhost(neighbourIndex, game);
+//							break;
+//				case UP: 	result[4] = evaluatePositionActivePills(neighbourIndex, game);
+//							result[5] = evaluatePositionGhost(neighbourIndex, game);
+//							break;
+//				case DOWN:  result[6] = evaluatePositionActivePills(neighbourIndex, game);
+//							result[7] = evaluatePositionGhost(neighbourIndex, game);
+//							break;
+//				case NEUTRAL:
+//							throw new IllegalStateException("Should not happen, revise code");
+//			}
+//		}
+//		input.addAll(new ArrayList<Double>(Arrays.asList(result)));
+//	}
 	
 	public double evaluatePositionActivePills(int neighbourIndex, Game game) {
 		return evaluatePosition(neighbourIndex, game.getActivePillsIndices(), game);
@@ -77,6 +163,29 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 			return 1.0;
 		}
 		return result;
+	}
+	
+	private boolean isNearestGhostEdible(Game game) {
+		int[] ghostNodes = new int[4];
+		ghostNodes[0] = game.getGhostCurrentNodeIndex(GHOST.BLINKY);
+		ghostNodes[1] = game.getGhostCurrentNodeIndex(GHOST.INKY);
+		ghostNodes[2] = game.getGhostCurrentNodeIndex(GHOST.SUE);
+		ghostNodes[3] = game.getGhostCurrentNodeIndex(GHOST.PINKY);
+		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), ghostNodes, DM.MANHATTAN);
+		if(game.getGhostCurrentNodeIndex(GHOST.BLINKY) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.BLINKY);
+		}
+		if(game.getGhostCurrentNodeIndex(GHOST.INKY) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.INKY);
+		}
+		if(game.getGhostCurrentNodeIndex(GHOST.SUE) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.SUE);
+		}
+		if(game.getGhostCurrentNodeIndex(GHOST.PINKY) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.PINKY);
+		}
+		
+		throw new IllegalStateException("Should not happen, revise code");
 	}
 	
 	@Override

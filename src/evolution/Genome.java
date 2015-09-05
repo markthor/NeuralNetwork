@@ -56,14 +56,14 @@ public class Genome {
 		return new Genome(genCode.clone());
 	}
 	
-	@Override
-	public int hashCode() {
-		double result = 0;
-		for(int i = 0; i<genCode.length; i++) {
-			result += genCode[i] * 61.0;
-			result = result % 191449;
-		}
-		return (int) result;
-	}
+//	@Override
+//	public int hashCode() {
+//		double result = 0;
+//		for(int i = 0; i<genCode.length; i++) {
+//			result += genCode[i] * 61.0;
+//			result = result % 191449;
+//		}
+//		return (int) result;
+//	}
 	
 }
