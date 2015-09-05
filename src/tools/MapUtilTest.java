@@ -19,7 +19,7 @@ public class MapUtilTest
             testMap.put( "SomeString" + random.nextInt(), random.nextInt());
         }
 
-        testMap = MapTool.sortByValue( testMap );
+        testMap = CollectionTool.sortByValue( testMap );
         Assert.assertEquals( 1000, testMap.size() );
 
         Integer previous = null;

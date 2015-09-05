@@ -60,7 +60,7 @@ public class CLIParser {
 		    	Evolver.intensity = Double.parseDouble(line.getOptionValue("i"));
 		    }
 		    if (line.hasOption("c")) {
-		    	Evolver.children = Integer.parseInt(line.getOptionValue("c"));
+		    	Evolver.sizeOfGeneration = Integer.parseInt(line.getOptionValue("c"));
 		    }
 		    if (line.hasOption("E")) {
 		    	Evolver.elitists = Integer.parseInt(line.getOptionValue("E"));

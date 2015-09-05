@@ -10,62 +10,94 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import network.Network;
-import tools.MapTool;
+import tools.CollectionTool;
 import tools.MathTool;
 
 public class Generation {
-	private Map<Network, Integer> networksWithFitness;
+	private Map<Network, Evaluation> networksWithFitness;
 	private int number;
 
-	/***
-	 * Seeds a generation with multiple parents, each one seeding childrenPerParent children,
-	 */
-	public Generation(int number, List<Network> multipleParents, int childrenPerParent, double chanceOfMutation, double intensity) {
-		List<Network> inputNetworks = new ArrayList<Network>();
-		inputNetworks.addAll(multipleParents);
+	public Generation(int number, int size, int numberOfElitists, int numberOfParents, Generation previousGeneration, SelectionCriteria selection, SpawnCriteria spawn, double chanceOfMutation, double intensity, double crossoverProbability) {
 		
-		for(Network parent: multipleParents) {
+		List<Network> inputNetworks = new ArrayList<Network>();
+		List<Network> parents = new ArrayList<Network>();
+		
+		inputNetworks.addAll(previousGeneration.getTopNetworksWithHighestFitness(numberOfElitists));
+		
+		if(selection == SelectionCriteria.Fittest) {
+			parents.addAll(previousGeneration.getTopNetworksWithHighestFitness(numberOfParents));
+		}
+		if(selection == SelectionCriteria.StochasticallyBasedOnFitness) {
+			for(int i = 0; i < numberOfParents; i++) {
+				parents.add(previousGeneration.selectParentToNextGenerationBasedOnFitness());
+			}
+		}
+		if(selection == SelectionCriteria.StochasticallyBasedOnRank) {
+			for(int i = 0; i < numberOfParents; i++) {
+				parents.add(previousGeneration.selectParentToNextGenerationBasedOnRank());
+			}
+		}
+		
+		if(spawn == SpawnCriteria.Mutation) {
+			int childrenPerParent = (size-numberOfElitists)/numberOfParents;
+			int additionalChildren = (size-numberOfElitists)%numberOfParents;
+			for(Network parent: parents) {
+				for(int i = 0; i < childrenPerParent; i++) {
+					inputNetworks.add(spawnChild(parent, chanceOfMutation, intensity));
+				}
+			}
+			for(int i = 0; i<additionalChildren; i++) {
+				inputNetworks.add(spawnChild(parents.get(0), chanceOfMutation, intensity));
+			}
+		}
+		if(spawn == SpawnCriteria.Crossover) {
+			int numberOfChildren = size-numberOfElitists;
+			for(int i = 0; i < numberOfChildren; i++) {
+				if(MathTool.getDoubleBetweenZeroAnd(1) < crossoverProbability) {
+					inputNetworks.add(spawnChild(CollectionTool.getRandomElement(parents), CollectionTool.getRandomElement(parents)));
+				} else {
+					inputNetworks.add(spawnChild(CollectionTool.getRandomElement(parents), chanceOfMutation, intensity));
+				}
+			}
+		}
+		
+		if(inputNetworks.size() != size) {
+			throw new IllegalArgumentException("Construction parameters did not add up.");
+		}
+		constructGeneration(number, inputNetworks);
+	}
+	
+	public Generation(int number, List<Network> parents, int size, double chanceOfMutation, double intensity) {
+		List<Network> inputNetworks = new ArrayList<Network>();
+		inputNetworks.addAll(parents);
+		
+		int childrenPerParent = (size-parents.size())/parents.size();
+		int additionalChildren = (size-parents.size())%parents.size();
+		for(Network parent: parents) {
 			for(int i = 0; i < childrenPerParent; i++) {
 				inputNetworks.add(spawnChild(parent, chanceOfMutation, intensity));
 			}
 		}
-		
-		constructGeneration(number, inputNetworks);
-	}
-	
-	/***
-	 * Seeds a generation from a previous generation, selecting the parent stochastically based on fitness and keeping the numberOfElitists best networks unmodified.
-	 */
-	public Generation(int number, Generation lastGeneration, int numberOfNetworks, int numberOfElitists, double chanceOfMutation, double intensity) {
-		List<Network> inputNetworks = new ArrayList<Network>(numberOfNetworks);
-		
-		Network parent = lastGeneration.selectParentToNextGeneration();
-		List<Network> eliteNetworks = lastGeneration.getTopNetworksWithHighestFitness(numberOfElitists);
-		inputNetworks.addAll(eliteNetworks);
-		
-		for(int i = 0; i < numberOfNetworks-numberOfElitists; i++) {
-			Genome mutatedGenome = parent.getGenome().clone();
-			mutatedGenome.mutate(chanceOfMutation, intensity);
-			inputNetworks.add(new Network(mutatedGenome, parent.getSpecies()));
+		for(int i = 0; i<additionalChildren; i++) {
+			inputNetworks.add(spawnChild(parents.get(0), chanceOfMutation, intensity));
 		}
 		
-		assert inputNetworks.size() == numberOfNetworks;
 		constructGeneration(number, inputNetworks);
 	}
 	
 	/***
 	 * Seeds a generation from a single parent.
 	 */
-	public Generation(int number, Network parent, int numberOfNetworks, double chanceOfMutation, double intensity) {
-		List<Network> inputNetworks = new ArrayList<Network>(numberOfNetworks);
-		for(int i = 0; i < numberOfNetworks-1; i++) {
+	public Generation(int number, Network parent, int size, double chanceOfMutation, double intensity) {
+		List<Network> inputNetworks = new ArrayList<Network>(size);
+		for(int i = 0; i < size-1; i++) {
 			Genome mutatedGenome = parent.getGenome().clone();
 			mutatedGenome.mutate(chanceOfMutation, intensity);
 			inputNetworks.add(new Network(mutatedGenome, parent.getSpecies()));
 		}
 		inputNetworks.add(new Network(parent.getGenome().clone(), parent.getSpecies()));
 		
-		assert inputNetworks.size() == numberOfNetworks;
+		assert inputNetworks.size() == size;
 		constructGeneration(number, inputNetworks);
 	}
 
@@ -78,9 +110,9 @@ public class Generation {
 	
 	private void constructGeneration(int number, List<Network> inputNetworks) {
 		this.number = number;
-		networksWithFitness = new HashMap<Network, Integer>();
+		networksWithFitness = new HashMap<Network, Evaluation>();
 		for(Network n: inputNetworks) {
-			networksWithFitness.put(n, -1);
+			networksWithFitness.put(n, new Evaluation());
 		}
 	}
 	
@@ -90,62 +122,89 @@ public class Generation {
 		return new Network(mutatedGenome, parent.getSpecies());
 	}
 	
-	public void addFitnessToNetwork(int fitness, Network network) {
+	private Network spawnChild(Network parent1, Network parent2) {
+		Genome combinedGenome = parent1.getGenome().crossover(parent2.getGenome());
+		return new Network(combinedGenome, parent1.getSpecies());
+	}
+	
+	public void addFitnessToNetwork(int tryNumber, int fitness, Network network) {
 		if(!networksWithFitness.containsKey(network)) {
 			throw new IllegalStateException("Tried to add fitness to a network that did not exist in the generation");
 		}
-		networksWithFitness.put(network, fitness);
+		networksWithFitness.get(network).setFitness(tryNumber, fitness);
 	}
 	
-	public int getFitnessOfNetwork(Network network) {
-		return networksWithFitness.get(network);
+	public double getAverageFitnessOfNetwork(Network network) {
+		return networksWithFitness.get(network).getAverageFitness();
 	}
 	
 	public List<Network> getTopNetworksWithHighestFitness(int numberOfElitists) {
 		List<Network> result = new ArrayList<Network>();
-		networksWithFitness = MapTool.sortByValue(networksWithFitness);
+		networksWithFitness = CollectionTool.sortByValue(networksWithFitness);
 		
-		for(Entry<Network, Integer> nf : networksWithFitness.entrySet()) {
+		for(Entry<Network, Evaluation> ne : networksWithFitness.entrySet()) {
 			if(result.size() < numberOfElitists)
-			result.add(nf.getKey());
+			result.add(ne.getKey());
 		}
 		
 		return result;
 	}
 	
-	public Network selectParentToNextGeneration() {
+	public Network selectParentToNextGenerationBasedOnFitness() {
 		if(networksWithFitness.keySet().size() == 0) {
 			throw new IllegalStateException("The generation must have networks to select the fittest");
 		}
-		for(Integer i :networksWithFitness.values()) {
-			if(i < 0) {
+		for(Evaluation e :networksWithFitness.values()) {
+			if(e.getAverageFitness() < 0.0) {
 				System.out.println(Arrays.toString(networksWithFitness.values().toArray(new Integer[0])));
 				throw new IllegalStateException("Not all fitness values have been updated");
 			}
 		}
 		
-		int totalFitness = 0;
-		for(Integer n: networksWithFitness.values()) {
-			totalFitness += n;
+		double totalFitness = 0.0;
+		for(Evaluation e: networksWithFitness.values()) {
+			totalFitness += e.getAverageFitness();
 		}
 		
-		int selector = MathTool.getIntBetweenZeroAnd(totalFitness);
-		int accumulatedFitness = 0;
-		for(Entry<Network, Integer> entry: networksWithFitness.entrySet()) {
-			if(isIncludedInInterval(selector, accumulatedFitness, accumulatedFitness+entry.getValue())) {
+		double selector = MathTool.getDoubleBetweenZeroAnd(totalFitness);
+		double accumulatedFitness = 0;
+		for(Entry<Network, Evaluation> entry: networksWithFitness.entrySet()) {
+			if(isIncludedInInterval(selector, accumulatedFitness, accumulatedFitness+entry.getValue().getAverageFitness())) {
 				return entry.getKey();
 			} else {
-				accumulatedFitness += entry.getValue();
+				accumulatedFitness += entry.getValue().getAverageFitness();
+			}
+		}
+
+		throw new IllegalStateException("Should not happen, revise code");
+	}
+	
+	public Network selectParentToNextGenerationBasedOnRank() {
+		if(networksWithFitness.keySet().size() == 0) {
+			throw new IllegalStateException("The generation must have networks to select the fittest");
+		}
+		for(Evaluation e :networksWithFitness.values()) {
+			if(e.getAverageFitness() < 0.0) {
+				System.out.println(Arrays.toString(networksWithFitness.values().toArray(new Integer[0])));
+				throw new IllegalStateException("Not all fitness values have been updated");
 			}
 		}
 		
-		System.err.println("Should not happen, revise code");
-		return null;
+		networksWithFitness = CollectionTool.sortByValue(networksWithFitness);
+		//More tun if need be
+		int i = 0;
+		for(Entry<Network, Evaluation> entry : networksWithFitness.entrySet()) {
+			if(MathTool.getDoubleBetweenZeroAnd(1) < 0.5 || i == networksWithFitness.entrySet().size()-1)
+				return entry.getKey();
+			i++;
+		}
+		
+		throw new IllegalStateException("Should not happen, revise code");
 	}
 	
 	public void evenAllFitnessValues() {
-		for(Entry<Network, Integer> nf: networksWithFitness.entrySet()) {
-			addFitnessToNetwork(1, nf.getKey());
+		for(Entry<Network, Evaluation> ne: networksWithFitness.entrySet()) {
+			addFitnessToNetwork(1, 1, ne.getKey());
 		}
 	}
 	
@@ -154,8 +213,8 @@ public class Generation {
 		IOManager.saveGenerationToFile(this, number);
 	}
 	
-	private boolean isIncludedInInterval(int input, int lower, int upper) {
-		return input > lower && input <= upper;
+	private boolean isIncludedInInterval(double input, double lower, double upper) {
+		return input >= lower && input <= upper;
 	}
 	
 	public List<Network> getNetworks() {
@@ -166,16 +225,20 @@ public class Generation {
 		return getNetworks().get(index);
 	}
 	
-	public int highestFitness() {
-		return getFitnessOfNetwork(getTopNetworksWithHighestFitness(1).get(0));
+	public double highestFitness() {
+		return getAverageFitnessOfNetwork(getTopNetworksWithHighestFitness(1).get(0));
 	}
 	
-	public int totalFitness() {
-		int result = 0;
-		for(Entry<Network, Integer> entry: networksWithFitness.entrySet()) {
-			result += entry.getValue();
+	public double totalFitness() {
+		double result = 0;
+		for(Entry<Network, Evaluation> entry: networksWithFitness.entrySet()) {
+			result += entry.getValue().getAverageFitness();
 		}
 		return result;
+	}
+	
+	public double averageFitness() {
+		return ((double) totalFitness()) / ((double) getNetworks().size());
 	}
 	
 	public int getNumber() {
@@ -185,5 +248,40 @@ public class Generation {
 	@Override
 	public String toString() {
 		return "Generation number: " + number + "\n" + networksWithFitness;
+	}
+	
+	private class Evaluation implements Comparable<Evaluation> {
+		private Map<Integer, Integer> fitnessPerTry;
+
+		public Evaluation() {
+			fitnessPerTry = new HashMap<Integer, Integer>();
+			fitnessPerTry.put(1, -1);
+		}
+
+		public int getTotalFitness() {
+			int result = 0;
+			for(Entry<Integer, Integer> entry: fitnessPerTry.entrySet()) {
+				result += entry.getValue();
+			}
+			return result;
+		}
+
+		public void setFitness(int tryNumber, int fitness) {
+			fitnessPerTry.put(tryNumber, fitness);
+		}
+		
+		public double getAverageFitness() {
+			return ((double) getTotalFitness()) / ((double) fitnessPerTry.size());
+		}
+
+		@Override
+		public int compareTo(Evaluation e) {
+			return (new Double(getAverageFitness()).compareTo(new Double(e.getAverageFitness())))*-1;
+		}
+		
+		@Override
+		public String toString() {
+			return new Double(getAverageFitness()).toString();
+		}
 	}
 }

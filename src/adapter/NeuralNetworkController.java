@@ -15,10 +15,12 @@ import evolution.Generation;
 public class NeuralNetworkController extends Controller<MOVE> {
 
 	protected Network network;
+	protected Generation currentGeneration;
+	protected int numberOftries = 1;
 
 	protected final static double MAX_X = 120.0;
 	protected final static double MAX_Y = 120.0;
-	protected Generation currentGeneration;
+
 
 	public NeuralNetworkController(Network network) {
 		super();
@@ -104,4 +106,11 @@ public class NeuralNetworkController extends Controller<MOVE> {
 		this.currentGeneration = currentGeneration;
 	}
 	
+	public void incrementNumberOfTries() {
+		numberOftries++;
+	}
+	
+	public void resetNumberOfTries() {
+		numberOftries = 1;
+	}
 }

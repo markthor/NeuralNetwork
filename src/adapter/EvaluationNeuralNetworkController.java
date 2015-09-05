@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import network.Network;
-import pacman.game.Constants.GHOST;
-import pacman.game.Game;
 import pacman.game.Constants.DM;
+import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
+import pacman.game.Game;
 
 public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 	
@@ -18,7 +18,7 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
-		currentGeneration.addFitnessToNetwork(game.getScore(), network);
+		currentGeneration.addFitnessToNetwork(numberOftries, game.getScore(), network);
 		return getMoveFromOutput(network.activateInputs(getInputFromGameState(game)));
 	}
 	
@@ -31,15 +31,30 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 	}
 	
 	public void fillWithEvaluationOfNeighbouringNodes(List<Double> input, Game game) {
+		Double[] result = new Double[8];
+		for(int i = 0; i < result.length; i++) {
+			result[i] = new Double(0.0);
+		}
 		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
-		
 		for(int neighbourIndex: neighbours) {
-			input.add(evaluatePositionActivePills(neighbourIndex, game));
+			switch(game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), neighbourIndex)) {
+				case RIGHT: result[0] = evaluatePositionActivePills(neighbourIndex, game);
+							result[1] = evaluatePositionGhost(neighbourIndex, game);
+							break;
+				case LEFT:  result[2] = evaluatePositionActivePills(neighbourIndex, game);
+							result[3] = evaluatePositionGhost(neighbourIndex, game);
+							break;
+				case UP: 	result[4] = evaluatePositionActivePills(neighbourIndex, game);
+							result[5] = evaluatePositionGhost(neighbourIndex, game);
+							break;
+				case DOWN:  result[6] = evaluatePositionActivePills(neighbourIndex, game);
+							result[7] = evaluatePositionGhost(neighbourIndex, game);
+							break;
+				case NEUTRAL:
+							throw new IllegalStateException("Should not happen, revise code");
+			}
 		}
-		
-		for(int neighbourIndex: neighbours) {
-			input.add(evaluatePositionGhost(neighbourIndex, game));
-		}
+		input.addAll(new ArrayList<Double>(Arrays.asList(result)));
 	}
 	
 	public double evaluatePositionActivePills(int neighbourIndex, Game game) {
@@ -52,12 +67,15 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 		ghostNodes[1] = game.getGhostCurrentNodeIndex(GHOST.INKY);
 		ghostNodes[2] = game.getGhostCurrentNodeIndex(GHOST.SUE);
 		ghostNodes[3] = game.getGhostCurrentNodeIndex(GHOST.PINKY);
-		return evaluatePosition(neighbourIndex, ghostNodes, game);
+		return 1.0 - evaluatePosition(neighbourIndex, ghostNodes, game);
 	}
 	
 	private double evaluatePosition(int neighbourIndex, int[] indicies, Game game) {
 		double result = 0.0;
 		result = 1 / game.getDistance(neighbourIndex, game.getClosestNodeIndexFromNodeIndex(neighbourIndex, indicies, DM.MANHATTAN), DM.MANHATTAN);
+		if(Double.isInfinite(result)) {
+			return 1.0;
+		}
 		return result;
 	}
 	
