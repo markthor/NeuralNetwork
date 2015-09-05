@@ -28,13 +28,18 @@ public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
 	private List<Double> getInputFromGameState(Game game) {
 		List<Double> input = new ArrayList<Double>();
 		fillWithCoordinatesOfNode(input, game.getPacmanCurrentNodeIndex(), game);
-		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.BLINKY), game);
-		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.INKY), game);
-		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.PINKY), game);
-		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.SUE), game);
+		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.BLINKY), game);
+		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.INKY), game);
+		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.PINKY), game);
+		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.SUE), game);
 		//fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), game);
 		//fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getPowerPillIndices(), DM.MANHATTAN), game);
+		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN)));
+		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY), DM.MANHATTAN)));
+		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.MANHATTAN)));
+		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE), DM.MANHATTAN)));
 		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
+		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePowerPillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
 		
 		//fillWithZeroOrOne(input, game.isGhostEdible(GHOST.BLINKY));
 		//fillWithZeroOrOne(input, game.isGhostEdible(GHOST.INKY));
@@ -43,7 +48,7 @@ public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
 		//game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN);
 		//fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getJunctionIndices(), DM.MANHATTAN), game);
 		
-		System.out.println("furthest dist: "+ game.getDistance(game.getPacmanCurrentNodeIndex(), game.getFarthestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN));
+		//System.out.println("furthest dist: "+ game.getDistance(game.getPacmanCurrentNodeIndex(), game.getFarthestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN));
 		
 		return input;
 	}

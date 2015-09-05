@@ -50,17 +50,17 @@ public class Evolver {
 	}
 	
 	private static void setDefaultArgs() {
-		evolve = false;
-		readOld = true;
-		infinity = false;
+		evolve = true;
+		readOld = false;
+		infinity = true;
 		readGen = 0;
 		
 		// Evolution parameters
-		hiddenSize = 18;
+		hiddenSize = 8;
 		chanceOfMutation = 0.0517;
 		intensity = 0.443;
 		children = 30;
-		childrenPerParent = 8;
+		childrenPerParent = 6;
 		elitists = 5;
 		terminalFitness = 1300;
 		terminalGeneration = 500;
@@ -68,7 +68,7 @@ public class Evolver {
 		initialWeight = 0.0;
 		initialBias = 0.0;
 		
-		species = new Species(16, hiddenSize, 4);
+		species = new Species(8, hiddenSize, 4);
 		controller = new BlamBlamNeuralNetworkController(null);
 	}
 	
