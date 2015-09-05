@@ -54,7 +54,7 @@ public class CLIParser {
 		    	Evolver.hiddenSize = Integer.parseInt(line.getOptionValue("s"));
 		    }
 		    if (line.hasOption("m")) {
-		    	Evolver.chanceOfMutation = Double.parseDouble(line.getOptionValue("m"));
+		    	Evolver.mutationProbability = Double.parseDouble(line.getOptionValue("m"));
 		    }
 		    if (line.hasOption("i")) {
 		    	Evolver.intensity = Double.parseDouble(line.getOptionValue("i"));

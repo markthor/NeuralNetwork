@@ -26,7 +26,7 @@ public class Evolver {
 	
 	// Evolution parameters
 	public static int hiddenSize;
-	public static double chanceOfMutation;
+	public static double mutationProbability;
 	public static double intensity;
 	public static double crossoverProbability;
 	public static int sizeOfGeneration;
@@ -36,8 +36,8 @@ public class Evolver {
 	public static int terminalGeneration;
 	public static int numberOfGenerations;
 	public static int saveInterval;
-	public static int numberOfEvaluationsPerChild;
 	public static int numberOfGenomesToSave;
+	public static int numberOfEvaluationsPerChild;
 	public static double initialWeight;
 	public static double initialBias;
 	
@@ -68,7 +68,7 @@ public class Evolver {
 		
 		// Evolution parameters
 		hiddenSize = 10;
-		chanceOfMutation = 0.1;
+		mutationProbability = 0.1;
 		intensity = 0.1;
 		crossoverProbability = 0.2;
 		sizeOfGeneration = 35;
@@ -136,12 +136,12 @@ public class Evolver {
 				latestGenomes = IOManager.readMultipleGenomes(readGen);
 			}
 			latestGenomes = IOManager.readGenomesFromLatestGeneration();
-			currentGeneration = new Generation(latestGenerationNumber, Network.genomesToNetwork(latestGenomes, species), sizeOfGeneration, chanceOfMutation, intensity);
+			currentGeneration = new Generation(latestGenerationNumber, Network.genomesToNetwork(latestGenomes, species), sizeOfGeneration, mutationProbability, intensity);
 			numberOfGenerations = latestGenerationNumber;
 		} else {
 			currentGenome = new Genome(species, initialWeight, initialBias);
 			currentNetwork = new Network(currentGenome, species);
-			currentGeneration = new Generation(numberOfGenerations, currentNetwork, sizeOfGeneration, chanceOfMutation, intensity);
+			currentGeneration = new Generation(numberOfGenerations, currentNetwork, sizeOfGeneration, mutationProbability, intensity);
 		}
 		
 		currentGeneration.evenAllFitnessValues();
@@ -149,7 +149,7 @@ public class Evolver {
 		Executor exec = new Executor();
 		
 		do {
-			currentGeneration = new Generation(numberOfGenerations, sizeOfGeneration, elitists, parents, currentGeneration, selection, spawn, chanceOfMutation, intensity, crossoverProbability);
+			currentGeneration = new Generation(numberOfGenerations, sizeOfGeneration, elitists, parents, currentGeneration, selection, spawn, mutationProbability, intensity, crossoverProbability);
 			controller.setCurrentGeneration(currentGeneration);
 			
 			for(int i = 0; i < sizeOfGeneration; i++) {
