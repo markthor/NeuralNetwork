@@ -12,6 +12,7 @@ import pacman.controllers.Controller;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
+import adapter.BlamBlamNeuralNetworkController;
 import adapter.EvaluationNeuralNetworkController;
 import adapter.NeuralNetworkController;
 import cli.CLIParser;
@@ -61,6 +62,7 @@ public class Evolver {
 	}
 	
 	private static void setDefaultArgs() {
+
 		evolve = true;
 		readOld = false;
 		infinity = true;
@@ -84,7 +86,6 @@ public class Evolver {
 		
 		selection = SelectionCriteria.StochasticallyBasedOnRank;
 		spawn = SpawnCriteria.Crossover;
-		
 
 //		species = new Species(16, hiddenSize, 4);
 //		controller = new BlamBlamNeuralNetworkController(null);
