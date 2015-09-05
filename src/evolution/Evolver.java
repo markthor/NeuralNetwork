@@ -3,12 +3,17 @@ package evolution;
 import io.IOManager;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 import network.Network;
 import pacman.Executor;
+import pacman.controllers.Controller;
+import pacman.controllers.examples.AggressiveGhosts;
 import pacman.controllers.examples.StarterGhosts;
-import adapter.BlamBlamNeuralNetworkController;
+import pacman.game.Constants.GHOST;
+import pacman.game.Constants.MOVE;
+import adapter.EvaluationNeuralNetworkController;
 import adapter.NeuralNetworkController;
 import cli.CLIParser;
 
@@ -36,6 +41,7 @@ public class Evolver {
 	
 	public static NeuralNetworkController controller;
 	public static Species species;
+	public static Controller<EnumMap<GHOST,MOVE>> ghostController;
 	
 	/**
 	 * The main method. Several options are listed - simply remove comments to use the option you want.
@@ -51,7 +57,9 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 		evolve = true;
-		readOld = false;
+
+		readOld = true;
+
 		infinity = true;
 		readGen = 0;
 		
@@ -68,8 +76,12 @@ public class Evolver {
 		initialWeight = 0.0;
 		initialBias = 0.0;
 		
-		species = new Species(8, hiddenSize, 4);
-		controller = new BlamBlamNeuralNetworkController(null);
+
+//		species = new Species(16, hiddenSize, 4);
+//		controller = new BlamBlamNeuralNetworkController(null);
+		species = new Species(12, hiddenSize, 4);
+		controller = new EvaluationNeuralNetworkController(null);
+		ghostController = new AggressiveGhosts();
 	}
 	
 	private static void startSimulation() {
@@ -93,7 +105,7 @@ public class Evolver {
 
 			controller.setCurrentGeneration(generation);
 			
-			exec.runGameTimed(controller,new StarterGhosts(),true);
+			exec.runGameTimed(controller,ghostController,true);
 		} else {
 			evolutionLoop();
 		}
@@ -128,7 +140,7 @@ public class Evolver {
 			
 			for(int i = 0; i < children; i++) {
 				controller.setNetwork(currentGeneration.getNetwork(i));
-				exec.runGame(controller,new StarterGhosts(),false, 0);
+				exec.runGame(controller,ghostController,false, 0);
 			}
 			System.out.println("Total fitness: " + currentGeneration.totalFitness());
 			System.out.println("Highest fitness: " + currentGeneration.highestFitness());
