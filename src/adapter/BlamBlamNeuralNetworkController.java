@@ -10,6 +10,8 @@ import pacman.game.Constants.MOVE;
 import network.Network;
 
 public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
+	
+	private static final double MAX_DIST = 255.0;
 
 	public BlamBlamNeuralNetworkController(Network network) {
 		super(network);
@@ -22,34 +24,61 @@ public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
 	}
 	
 	private double scaleDist(Double dist) {
-		return dist / 255.0;
+		return dist / MAX_DIST;
+	}
+	
+	private void addGhosts(Game game, List<Double> input) {
+		if (!game.isGhostEdible(GHOST.BLINKY)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}
+		if (!game.isGhostEdible(GHOST.INKY)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}
+		if (!game.isGhostEdible(GHOST.PINKY)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}
+		if (!game.isGhostEdible(GHOST.SUE)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}	
+	}
+	
+	private void addEdibleGhosts(Game game, List<Double> input) {
+		if (game.isGhostEdible(GHOST.BLINKY)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}
+		if (game.isGhostEdible(GHOST.INKY)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}
+		if (game.isGhostEdible(GHOST.PINKY)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}
+		if (game.isGhostEdible(GHOST.SUE)) {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE), DM.MANHATTAN)));
+		} else {
+			input.add(1.0);
+		}		
 	}
 	
 	private List<Double> getInputFromGameState(Game game) {
 		List<Double> input = new ArrayList<Double>();
-		fillWithCoordinatesOfNode(input, game.getPacmanCurrentNodeIndex(), game);
-		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.BLINKY), game);
-		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.INKY), game);
-		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.PINKY), game);
-		//fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.SUE), game);
-		//fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), game);
-		//fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getPowerPillIndices(), DM.MANHATTAN), game);
-		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN)));
-		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY), DM.MANHATTAN)));
-		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.MANHATTAN)));
-		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE), DM.MANHATTAN)));
+		addGhosts(game, input);
+		addEdibleGhosts(game, input);
 		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
 		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePowerPillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
-		
-		//fillWithZeroOrOne(input, game.isGhostEdible(GHOST.BLINKY));
-		//fillWithZeroOrOne(input, game.isGhostEdible(GHOST.INKY));
-		//fillWithZeroOrOne(input, game.isGhostEdible(GHOST.PINKY));
-		//fillWithZeroOrOne(input, game.isGhostEdible(GHOST.SUE));
-		//game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN);
-		//fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getJunctionIndices(), DM.MANHATTAN), game);
-		
-		//System.out.println("furthest dist: "+ game.getDistance(game.getPacmanCurrentNodeIndex(), game.getFarthestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN));
-		
 		return input;
 	}
 	
