@@ -1,15 +1,12 @@
 package adapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import network.Network;
-import pacman.controllers.Controller;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
-import evolution.Generation;
 
 public class SimpleNeuralNetworkController extends NeuralNetworkController {
 
@@ -19,7 +16,7 @@ public class SimpleNeuralNetworkController extends NeuralNetworkController {
 
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
-		currentGeneration.addFitnessToNetwork(game.getScore(), network);
+		currentGeneration.addFitnessToNetwork(numberOftries, game.getScore(), network);
 		return getMoveFromOutput(network.activateInputs(getInputFromGameState(game)));
 	}
 	

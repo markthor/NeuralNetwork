@@ -21,7 +21,15 @@ public class MathTool {
 		return nd.sample();
 	}
 	
-	public static int getIntBetweenZeroAnd(int upperBound) {
+	public static int getIntFromZeroIncludingUpperExcludingZero(int upperBound) {
 		return random.nextInt(upperBound) + 1;
+	}
+	
+	public static int getIntFromZeroAndIncludingZeroExcludingUpper(int upperBound) {
+		return random.nextInt(upperBound);
+	}
+	
+	public static double getDoubleBetweenZeroAnd(double upperBound) {
+		return random.nextDouble()*upperBound;
 	}
 }

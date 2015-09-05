@@ -9,7 +9,6 @@ import java.util.List;
 import network.Network;
 import pacman.Executor;
 import pacman.controllers.Controller;
-import pacman.controllers.examples.AggressiveGhosts;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -30,15 +29,21 @@ public class Evolver {
 	public static int hiddenSize;
 	public static double chanceOfMutation;
 	public static double intensity;
-	public static int children;
-	public static int childrenPerParent;
+	public static double crossoverProbability;
+	public static int sizeOfGeneration;
 	public static int elitists;
+	public static int parents;
 	public static int terminalFitness;
 	public static int terminalGeneration;
 	public static int numberOfGenerations;
 	public static int saveInterval;
+	public static int numberOfEvaluationsPerChild;
+	public static int numberOfGenomesToSave;
 	public static double initialWeight;
 	public static double initialBias;
+	
+	public static SelectionCriteria selection;
+	public static SpawnCriteria spawn;
 	
 	public static NeuralNetworkController controller;
 	public static Species species;
@@ -57,32 +62,36 @@ public class Evolver {
 	}
 	
 	private static void setDefaultArgs() {
-		evolve = false;
 
-		readOld = true;
-
+		evolve = true;
+		readOld = false;
 		infinity = true;
 		readGen = 0;
 		
 		// Evolution parameters
-		hiddenSize = 12;
-		chanceOfMutation = 0.0517;
-		intensity = 0.443;
-		children = 100;
-		childrenPerParent = 2;
-		elitists = 40;
+		hiddenSize = 10;
+		chanceOfMutation = 0.1;
+		intensity = 0.1;
+		crossoverProbability = 0.2;
+		sizeOfGeneration = 35;
+		elitists = 0;
+		parents = 6;
 		terminalFitness = 1300;
 		terminalGeneration = 500;
 		saveInterval = 100;
-		initialWeight = 0.0;
-		initialBias = 0.0;
+		numberOfGenomesToSave = parents;
+		initialWeight = 0.1;
+		initialBias = 0.1;
+		numberOfEvaluationsPerChild = 3;
 		
+		selection = SelectionCriteria.StochasticallyBasedOnRank;
+		spawn = SpawnCriteria.Crossover;
 
-		species = new Species(10, hiddenSize, 4);
-		controller = new BlamBlamNeuralNetworkController(null);
-//		species = new Species(12, hiddenSize, 4);
-//		controller = new EvaluationNeuralNetworkController(null);
-		ghostController = new AggressiveGhosts();
+//		species = new Species(16, hiddenSize, 4);
+//		controller = new BlamBlamNeuralNetworkController(null);
+		species = new Species(12, hiddenSize, 4);
+		controller = new EvaluationNeuralNetworkController(null);
+		ghostController = new StarterGhosts();
 	}
 	
 	private static void startSimulation() {
@@ -92,6 +101,9 @@ public class Evolver {
 
 			Genome genome;
 			if(readOld) {
+				if(readGen != 0) {
+					genome = IOManager.readMultipleGenomes(readGen).get(0);
+				}
 				genome = IOManager.readGenomesFromLatestGeneration().get(0);
 			} else {
 				genome = new Genome(species, 0, 0);
@@ -113,6 +125,7 @@ public class Evolver {
 	}
 	
 	private static void evolutionLoop() {
+		System.out.println("Beginning evolution...");
 		numberOfGenerations = 1;
 		Genome currentGenome;
 		Generation currentGeneration;
@@ -120,14 +133,16 @@ public class Evolver {
 		if (readOld) {
 			int latestGenerationNumber = IOManager.getLatestGenerationNumber();
 			List<Genome> latestGenomes;
+			if(readGen != 0) {
+				latestGenomes = IOManager.readMultipleGenomes(readGen);
+			}
 			latestGenomes = IOManager.readGenomesFromLatestGeneration();
-			currentGeneration = new Generation(latestGenerationNumber, Network.genomesToNetwork(latestGenomes, species), childrenPerParent, chanceOfMutation, intensity);
-			children = childrenPerParent * latestGenomes.size();
+			currentGeneration = new Generation(latestGenerationNumber, Network.genomesToNetwork(latestGenomes, species), sizeOfGeneration, chanceOfMutation, intensity);
 			numberOfGenerations = latestGenerationNumber;
 		} else {
 			currentGenome = new Genome(species, initialWeight, initialBias);
 			currentNetwork = new Network(currentGenome, species);
-			currentGeneration = new Generation(numberOfGenerations, currentNetwork, children, chanceOfMutation, intensity);
+			currentGeneration = new Generation(numberOfGenerations, currentNetwork, sizeOfGeneration, chanceOfMutation, intensity);
 		}
 		
 		currentGeneration.evenAllFitnessValues();
@@ -135,15 +150,20 @@ public class Evolver {
 		Executor exec = new Executor();
 		
 		do {
-			System.out.println("New generation number: " + numberOfGenerations);
-			currentGeneration = new Generation(numberOfGenerations, currentGeneration, children, elitists, chanceOfMutation, intensity);
+			currentGeneration = new Generation(numberOfGenerations, sizeOfGeneration, elitists, parents, currentGeneration, selection, spawn, chanceOfMutation, intensity, crossoverProbability);
 			controller.setCurrentGeneration(currentGeneration);
 			
-			for(int i = 0; i < children; i++) {
+			for(int i = 0; i < sizeOfGeneration; i++) {
 				controller.setNetwork(currentGeneration.getNetwork(i));
-				exec.runGame(controller,ghostController,false, 0);
+				controller.resetNumberOfTries();
+				for(int j = 0; j < numberOfEvaluationsPerChild; j++) {
+					exec.runGame(controller,ghostController,false, 0);
+					controller.incrementNumberOfTries();
+				}
+				
 			}
-			System.out.println("Total fitness: " + currentGeneration.totalFitness());
+			System.out.println("Generation: " + numberOfGenerations);
+			System.out.println("Average fitness: " + currentGeneration.averageFitness());
 			System.out.println("Highest fitness: " + currentGeneration.highestFitness());
 			
 			if(numberOfGenerations % saveInterval == 0) {
@@ -152,16 +172,12 @@ public class Evolver {
 			
 			numberOfGenerations++;
 		} while(keepEvolving(currentGeneration));
-		currentGeneration.saveGeneration(elitists);
+		currentGeneration.saveGeneration(numberOfGenomesToSave);
 	}
 	
 	private static boolean keepEvolving(Generation generation) {
 		if(infinity) return true;
 		if(generation.highestFitness() < terminalFitness && generation.getNumber() < terminalGeneration) return true;
 		return false;
-	}
-	
-	private static void setSpeciesAndControllerToEvaluationBased(Species species, NeuralNetworkController controller) {
-
 	}
 }

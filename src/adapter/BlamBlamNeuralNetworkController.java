@@ -19,7 +19,7 @@ public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
 
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
-		currentGeneration.addFitnessToNetwork(game.getScore(), network);
+		currentGeneration.addFitnessToNetwork(numberOftries, game.getScore(), network);
 		return getMoveFromOutput(network.activateInputs(getInputFromGameState(game)));
 	}
 	
