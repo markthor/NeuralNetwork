@@ -79,8 +79,8 @@ public class Evolver {
 		terminalGeneration = 500;
 		saveInterval = 100;
 		numberOfGenomesToSave = parents;
-		initialWeight = 0.1;
-		initialBias = 0.1;
+		initialWeight = 0.0;
+		initialBias = 0.0;
 		numberOfEvaluationsPerChild = 3;
 		
 		selection = SelectionCriteria.StochasticallyBasedOnRank;
