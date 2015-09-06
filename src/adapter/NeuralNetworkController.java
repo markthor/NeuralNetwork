@@ -5,6 +5,8 @@ import java.util.List;
 
 import network.Network;
 import pacman.controllers.Controller;
+import pacman.game.Constants.DM;
+import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 import evolution.Generation;
@@ -27,6 +29,10 @@ public class NeuralNetworkController extends Controller<MOVE> {
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
 		return super.getMove();
+	}
+	
+	protected double booleanToZeroOrOne(boolean bool) {
+		return bool ? 1.0 : 0.0;
 	}
 	
 	protected void fillWithZeroOrOne(List<Double> input, boolean oneOrZero) {
@@ -85,6 +91,38 @@ public class NeuralNetworkController extends Controller<MOVE> {
 		}
 		
 		return null;
+	}
+	
+	protected boolean isNearestGhostEdible(Game game) {
+		int[] ghostNodes = new int[4];
+		ghostNodes[0] = game.getGhostCurrentNodeIndex(GHOST.BLINKY);
+		ghostNodes[1] = game.getGhostCurrentNodeIndex(GHOST.INKY);
+		ghostNodes[2] = game.getGhostCurrentNodeIndex(GHOST.SUE);
+		ghostNodes[3] = game.getGhostCurrentNodeIndex(GHOST.PINKY);
+		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), ghostNodes, DM.MANHATTAN);
+		if(game.getGhostCurrentNodeIndex(GHOST.BLINKY) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.BLINKY);
+		}
+		if(game.getGhostCurrentNodeIndex(GHOST.INKY) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.INKY);
+		}
+		if(game.getGhostCurrentNodeIndex(GHOST.SUE) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.SUE);
+		}
+		if(game.getGhostCurrentNodeIndex(GHOST.PINKY) == nearestGhostNode) {
+			return game.isGhostEdible(GHOST.PINKY);
+		}
+		
+		throw new IllegalStateException("Should not happen, revise code");
+	}
+	
+	protected int[] parseIntArray(int[] intArray) {
+		if(intArray.length == 0) {
+			int[] result = new int[0];
+			result[0] = 100;
+			return result;
+		}
+		return intArray;
 	}
 	
 	public Network getNetwork() {

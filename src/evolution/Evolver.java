@@ -11,12 +11,10 @@ import network.Network;
 import network.Species;
 import pacman.Executor;
 import pacman.controllers.Controller;
-import pacman.controllers.examples.AggressiveGhosts;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
-import adapter.BlamBlamNeuralNetworkController;
-import adapter.EvaluationNeuralNetworkController;
+import adapter.AdvancedNeuralNetworkController;
 import adapter.NeuralNetworkController;
 import cli.CLIParser;
 
@@ -64,14 +62,14 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 
-		evolve = false;
+		evolve = true;
 		readOld = false;
 		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters
 		hiddenSize = 8;
-		mutationProbability = 0.08;
+		mutationProbability = 0.1;
 		intensity = 0.2;
 		crossoverProbability = 0.2;
 		sizeOfGeneration = 35;
@@ -82,7 +80,7 @@ public class Evolver {
 		saveInterval = 100;
 		initialWeight = 0.0;
 		initialBias = 0.0;
-		numberOfEvaluationsPerChild = 3;
+		numberOfEvaluationsPerChild = 10;
 		
 		selection = SelectionCriteria.StochasticallyBasedOnRank;
 		spawn = SpawnCriteria.Mutation;
@@ -90,8 +88,8 @@ public class Evolver {
 
 		//species = new Species(10, hiddenSize, 4);
 		//controller = new BlamBlamNeuralNetworkController(null);
-		species = new Species(14, hiddenSize, 4);
-		controller = new EvaluationNeuralNetworkController(null);
+		species = new Species(22, hiddenSize, 4);
+		controller = new AdvancedNeuralNetworkController(null);
 		ghostController = new StarterGhosts();
 	}
 	

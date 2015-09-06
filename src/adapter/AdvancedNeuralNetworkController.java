@@ -29,14 +29,12 @@ public class AdvancedNeuralNetworkController extends NeuralNetworkController {
 		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.INKY), game);
 		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.PINKY), game);
 		fillWithCoordinatesOfNode(input, game.getGhostCurrentNodeIndex(GHOST.SUE), game);
-		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), game);
-		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getPowerPillIndices(), DM.MANHATTAN), game);
-		fillWithZeroOrOne(input, game.isGhostEdible(GHOST.BLINKY));
-		fillWithZeroOrOne(input, game.isGhostEdible(GHOST.INKY));
-		fillWithZeroOrOne(input, game.isGhostEdible(GHOST.PINKY));
-		fillWithZeroOrOne(input, game.isGhostEdible(GHOST.SUE));
-		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getJunctionIndices(), DM.MANHATTAN), game);
-		game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN);
+		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), parseIntArray(game.getActivePillsIndices()), DM.MANHATTAN), game);
+		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), parseIntArray(game.getPowerPillIndices()), DM.MANHATTAN), game);
+		fillWithZeroOrOne(input, isNearestGhostEdible(game));
+		fillWithCoordinatesOfNode(input, game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), parseIntArray(game.getJunctionIndices()), DM.MANHATTAN), game);
 		return input;
 	}
+	
+
 }

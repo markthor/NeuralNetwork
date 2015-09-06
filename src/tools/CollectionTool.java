@@ -1,5 +1,6 @@
 package tools;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -28,5 +29,15 @@ public class CollectionTool
 	
 	public static <T> T getRandomElement(List<T> list) {
 		return list.get(MathTool.getIntFromZeroAndIncludingZeroExcludingUpper(list.size()));
+	}
+	
+	public static int[] integerCollectionToIntegerArray(Collection<Integer> collection) {
+		int[] result = new int[collection.size()];
+		int i = 0;
+		for(Integer integer: collection) {
+			result[i] = integer;
+			i++;
+		}
+		return result;
 	}
 }

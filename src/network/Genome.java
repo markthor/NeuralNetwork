@@ -35,7 +35,7 @@ public class Genome {
 		
 		double[] resultGenCode = new double[genCode.length];
 		for(int i = 0; i < resultGenCode.length; i++) {
-			if(i < resultGenCode.length/2) {
+			if(MathTool.getDoubleBetweenZeroAnd(1) < 0.5) {
 				resultGenCode[i] = genCode[i];
 			} else {
 				resultGenCode[i] = other.getGenCode()[i];

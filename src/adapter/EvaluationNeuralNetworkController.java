@@ -165,29 +165,6 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 		return result;
 	}
 	
-	private boolean isNearestGhostEdible(Game game) {
-		int[] ghostNodes = new int[4];
-		ghostNodes[0] = game.getGhostCurrentNodeIndex(GHOST.BLINKY);
-		ghostNodes[1] = game.getGhostCurrentNodeIndex(GHOST.INKY);
-		ghostNodes[2] = game.getGhostCurrentNodeIndex(GHOST.SUE);
-		ghostNodes[3] = game.getGhostCurrentNodeIndex(GHOST.PINKY);
-		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), ghostNodes, DM.MANHATTAN);
-		if(game.getGhostCurrentNodeIndex(GHOST.BLINKY) == nearestGhostNode) {
-			return game.isGhostEdible(GHOST.BLINKY);
-		}
-		if(game.getGhostCurrentNodeIndex(GHOST.INKY) == nearestGhostNode) {
-			return game.isGhostEdible(GHOST.INKY);
-		}
-		if(game.getGhostCurrentNodeIndex(GHOST.SUE) == nearestGhostNode) {
-			return game.isGhostEdible(GHOST.SUE);
-		}
-		if(game.getGhostCurrentNodeIndex(GHOST.PINKY) == nearestGhostNode) {
-			return game.isGhostEdible(GHOST.PINKY);
-		}
-		
-		throw new IllegalStateException("Should not happen, revise code");
-	}
-	
 	@Override
 	protected void fillWithPossibleMoves(List<Double> input, Game game) {
 		List<MOVE> moves = Arrays.asList(game.getPossibleMoves(game.getPacmanCurrentNodeIndex()));
