@@ -1,5 +1,6 @@
 package tools;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +30,18 @@ public class CollectionTool
 	
 	public static <T> T getRandomElement(List<T> list) {
 		return list.get(MathTool.getIntFromZeroAndIncludingZeroExcludingUpper(list.size()));
+	}
+	
+	public static List<Integer> removeElementFromIntegerList(List<Integer> list, int elementToRemove) {
+		Integer integerToRemove = null;
+		for(Integer i: list) {
+			if(i == elementToRemove) {
+				integerToRemove = i;
+			}
+		}
+		
+		list.remove(integerToRemove);
+		return new ArrayList<Integer>(list);
 	}
 	
 	public static int[] integerCollectionToIntegerArray(Collection<Integer> collection) {

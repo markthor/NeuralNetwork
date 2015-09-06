@@ -23,7 +23,27 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
 		currentGeneration.addFitnessToNetwork(numberOftries, game.getScore(), network);
-		return MOVE.NEUTRAL;
+		return getBestMove(game);
+	}
+	
+	private MOVE getBestMove(Game game) {
+		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+		
+		int highestNeighbour = -1;
+		double highestNeighbourScore = -1.0;
+		for(int i = 0; i < neighbours.length; i++) {
+			double evaluation = evaluateNode(neighbours[i], game);
+			if(evaluateNode(neighbours[i], game) > highestNeighbourScore) {
+				highestNeighbourScore = evaluation;
+				highestNeighbour = neighbours[i];
+			}
+		}
+		
+		if(highestNeighbour == -1) {
+			throw new IllegalStateException("Should not happen, revise code");
+		}
+		
+		return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), highestNeighbour, DM.MANHATTAN);
 	}
 	
 	private double evaluateNode(int node, Game game) {
@@ -81,7 +101,7 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		ghostNodes.add(game.getGhostCurrentNodeIndex(GHOST.PINKY));
 		
 		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), CollectionTool.integerCollectionToIntegerArray(ghostNodes), DM.MANHATTAN);
-		ghostNodes.remove(ghostNodes);
+		ghostNodes = CollectionTool.removeElementFromIntegerList(ghostNodes, nearestGhostNode);
 		
 		if(ghostNodes.size() != 3) {
 			throw new IllegalStateException("Should not happen, revise code");
@@ -122,7 +142,7 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		ghostNodes.add(game.getGhostCurrentNodeIndex(GHOST.PINKY));
 		
 		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), CollectionTool.integerCollectionToIntegerArray(ghostNodes), DM.MANHATTAN);
-		ghostNodes.remove(ghostNodes);
+		ghostNodes = CollectionTool.removeElementFromIntegerList(ghostNodes, nearestGhostNode);
 		
 		if(ghostNodes.size() != 3) {
 			throw new IllegalStateException("Should not happen, revise code");
