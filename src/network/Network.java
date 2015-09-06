@@ -3,9 +3,6 @@ package network;
 import java.util.ArrayList;
 import java.util.List;
 
-import evolution.Genome;
-import evolution.Species;
-
 public class Network {
 	private List<Neuron> inputNeurons;
 	private List<Neuron> outputNeurons;
@@ -19,22 +16,24 @@ public class Network {
 		this.genome = genome;
 		this.species = species;
 		initializeLists(species.getLayers());
-		constructNetwork(species.getNumberOfNeuronsAtlayer(), genome.getGenCode());
+		constructNetwork(species.getNumberOfNeuronsAtlayer(), genome.getGenCode(), species.getNumberOfNeurons(), species.getNumberOfSynapsis());
 	}
 	
-	private void constructNetwork(List<Integer> neuronsAtLayer, double[] genCode) {
+	private void constructNetwork(List<Integer> neuronsAtLayer, double[] genCode, int numberOfNeurons, int numberOfSynapsis) {
 		List<Neuron> lastLayer = new ArrayList<Neuron>();
 		List<Neuron> currentLayer = new ArrayList<Neuron>();
 		
 		int layer = 1;
-		int genCodePointer = 0;
+		int genCodeWeightPointer = 0;
+		int genCodeBiasPointer = numberOfSynapsis;
 		
 		for(Integer i: neuronsAtLayer) {
 			
 			currentLayer.clear();
 			
 			for(int j = 0; j<i; j++) {
-				Neuron currentNeuron = new Neuron(layer);
+				Neuron currentNeuron = new Neuron(layer, genCode[genCodeBiasPointer]);
+				genCodeBiasPointer++;
 				allNeurons.get(layer-1).add(currentNeuron);
 				
 				currentLayer.add(currentNeuron);
@@ -43,13 +42,13 @@ public class Network {
 				} else if(layer == species.getLayers()) {
 					outputNeurons.add(currentNeuron);
 					for(Neuron lastLayerNeuron: lastLayer) {
-						new Synapsis(genCode[genCodePointer], genCode[genCodePointer+1], lastLayerNeuron, currentNeuron);
-						genCodePointer += 2;
+						new Synapsis(genCode[genCodeWeightPointer], lastLayerNeuron, currentNeuron);
+						genCodeWeightPointer++;
 					}
 				} else {
 					for(Neuron lastLayerNeuron: lastLayer) {
-						new Synapsis(genCode[genCodePointer], genCode[genCodePointer+1], lastLayerNeuron, currentNeuron);
-						genCodePointer += 2;
+						new Synapsis(genCode[genCodeWeightPointer], lastLayerNeuron, currentNeuron);
+						genCodeWeightPointer++;
 					}
 				}
 			}
@@ -61,7 +60,7 @@ public class Network {
 	
 	public List<Double> activateInputs(List<Double> inputs) {
 		for(int i = 0; i < inputs.size(); i++) {
-			inputNeurons.get(i).inputIntoAllSynapsis(inputs.get(i));
+			inputNeurons.get(i).inputIntoAllSynapsis(inputNeurons.get(i).activate(inputs.get(i)));
 		}
 		for(int i = 1; i<species.getLayers()-1; i++) {
 			for(Neuron n: allNeurons.get(i)) {
@@ -89,19 +88,22 @@ public class Network {
 	
 	public Genome getGenomeFromNetworkData() {
 		int genCodePointer = 0;
-		double[] genCode = new double[2*species.getNumberOfSynapsis()];
+		double[] genCode = new double[species.getNumberOfSynapsis()+species.getNumberOfNeurons()];
 
 		for(List<Neuron> neuronsAtLayer: allNeurons) {
 			for(Neuron n: neuronsAtLayer) {
 				for(Synapsis s: n.getOutputSynapsis()) {
 					genCode[genCodePointer] = s.getWeight();
 					genCodePointer++;
-					genCode[genCodePointer] = s.getBias();
-					genCodePointer++;
 				}
 			}
 		}
-
+		for(List<Neuron> neuronsAtLayer: allNeurons) {
+			for(Neuron n: neuronsAtLayer) {
+				genCode[genCodePointer] = n.getBias();
+				genCodePointer++;
+			}
+		}
 		
 		return new Genome(genCode);
 	}
@@ -151,8 +153,8 @@ public class Network {
 		return result;
 	}
 	
-//	@Override
-//	public int hashCode() {
-//		return genome.hashCode();
-//	}
+	@Override
+	public int hashCode() {
+		return genome.hashCode();
+	}
 }

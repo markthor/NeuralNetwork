@@ -2,16 +2,14 @@ package network;
 
 public class Synapsis {
 	private double weight;
-	private double bias;
 	private double lastInput;
 	
 	private Neuron inputNeuron;
 	private Neuron outputNeuron;
 
-	public Synapsis(double weight, double bias, Neuron input, Neuron output) {
+	public Synapsis(double weight, Neuron input, Neuron output) {
 		this.weight = weight;
-		this.bias = bias;
-		this.inputNeuron	= input;
+		this.inputNeuron = input;
 		this.outputNeuron = output;
 		input.addOutputSynapsis(this);
 		output.addInputSynapsis(this);
@@ -23,7 +21,7 @@ public class Synapsis {
 	}
 	
 	public double output() {
-		return (lastInput * weight) + bias;
+		return lastInput * weight;
 	}
 
 	public double getWeight() {
@@ -34,15 +32,7 @@ public class Synapsis {
 		this.weight = weight;
 	}
 	
-	public double getBias() {
-		return bias;
-	}
-	
-	public void setBias(double bias) {
-		this.bias = bias;
-	}
-	
 	public String toString() {
-		return "Synapsis with weight " + weight + " and bias " + bias;
+		return "Synapsis with weight " + weight;
 	}
 }

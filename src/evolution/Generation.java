@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import network.Genome;
 import network.Network;
 import tools.CollectionTool;
 import tools.MathTool;

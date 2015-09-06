@@ -5,10 +5,10 @@ import io.IOManager;
 import java.util.ArrayList;
 
 import tools.MathTool;
+import network.Genome;
 import network.Network;
+import network.Species;
 import evolution.Generation;
-import evolution.Genome;
-import evolution.Species;
 
 public class Executor {
 	public static void main(String args[]) {

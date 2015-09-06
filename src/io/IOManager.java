@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import network.Genome;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -16,7 +18,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import com.google.gson.Gson;
 
 import evolution.Generation;
-import evolution.Genome;
 
 public class IOManager {
 	private static String fileSeparator = System.getProperty("file.separator");

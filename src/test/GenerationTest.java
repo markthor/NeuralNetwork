@@ -1,14 +1,14 @@
 package test;
 
 import junit.framework.Assert;
+import network.Genome;
 import network.Network;
+import network.Species;
 
 import org.junit.Test;
 
 import tools.MathTool;
 import evolution.Generation;
-import evolution.Genome;
-import evolution.Species;
 
 public class GenerationTest {
 	@Test

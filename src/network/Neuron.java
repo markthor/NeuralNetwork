@@ -8,13 +8,15 @@ import tools.MathTool;
 public class Neuron {
 	private List<Synapsis> inputSynapsis;
 	private List<Synapsis> outputSynapsis;
+	private double bias;
 
 	private int layer;
 	
-	public Neuron(int layer) {
+	public Neuron(int layer, double bias) {
 		inputSynapsis = new ArrayList<Synapsis>();
 		outputSynapsis = new ArrayList<Synapsis>();
 		this.layer = layer;
+		this.bias = bias;
 	}
 	
 	public void inputIntoAllSynapsis(Double input) {
@@ -28,7 +30,11 @@ public class Neuron {
 		for(Synapsis s: inputSynapsis) {
 			result = result + s.output();
 		}
-		return MathTool.sigma(result);
+		return activate(result);
+	}
+	
+	public double activate(double sumInput) {
+		return MathTool.sigma(sumInput + bias);
 	}
 	
 	public void readAndOutput() {
@@ -45,6 +51,14 @@ public class Neuron {
 	
 	public int getLayer() {
 		return layer;
+	}
+	
+	public double getBias() {
+		return bias;
+	}
+
+	public void setBias(double bias) {
+		this.bias = bias;
 	}
 	
 	public List<Synapsis> getOutputSynapsis() {

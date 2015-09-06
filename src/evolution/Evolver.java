@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
+import network.Genome;
 import network.Network;
+import network.Species;
 import pacman.Executor;
 import pacman.controllers.Controller;
+import pacman.controllers.examples.AggressiveGhosts;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -88,7 +91,7 @@ public class Evolver {
 //		controller = new BlamBlamNeuralNetworkController(null);
 		species = new Species(14, hiddenSize, 4);
 		controller = new EvaluationNeuralNetworkController(null);
-		ghostController = new StarterGhosts();
+		ghostController = new AggressiveGhosts();
 	}
 	
 	private static void startSimulation() {
