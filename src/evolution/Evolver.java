@@ -87,11 +87,12 @@ public class Evolver {
 		selection = SelectionCriteria.StochasticallyBasedOnRank;
 		spawn = SpawnCriteria.Mutation;
 
-//		species = new Species(16, hiddenSize, 4);
-//		controller = new BlamBlamNeuralNetworkController(null);
-		species = new Species(14, hiddenSize, 4);
-		controller = new EvaluationNeuralNetworkController(null);
-		ghostController = new AggressiveGhosts();
+
+		species = new Species(10, hiddenSize, 4);
+		controller = new BlamBlamNeuralNetworkController(null);
+//		species = new Species(14, hiddenSize, 4);
+//		controller = new EvaluationNeuralNetworkController(null);
+		ghostController = new StarterGhosts();
 	}
 	
 	private static void startSimulation() {

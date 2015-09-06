@@ -17,7 +17,6 @@ import evolution.SpawnCriteria;
 public class CLIParser {
 	private static ArrayList<String> usedArgs;
 	private static ArrayList<String> unusedArgs;
-	private static ArrayList<String> ignoredArgs;
 	
 	private static final String[] ARG0  = {"h", "help", "Show this help message"};
 	private static final String[] ARG1  = {"e", "evolve", "Evolve (Sideeffect: No GUI)"};
