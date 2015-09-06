@@ -29,22 +29,20 @@ public class Genome {
 	}
 	
 	public Genome crossover(Genome other) {
+		if(other.getGenCode().length != genCode.length) {
+			throw new IllegalArgumentException("genCodes have to be of equal length");
+		}
 		
-		throw new UnsupportedOperationException();
+		double[] resultGenCode = new double[genCode.length];
+		for(int i = 0; i < resultGenCode.length; i++) {
+			if(i < resultGenCode.length/2) {
+				resultGenCode[i] = genCode[i];
+			} else {
+				resultGenCode[i] = other.getGenCode()[i];
+			}
+		}
 		
-//		if(other.getGenCode().length != genCode.length) {
-//			throw new IllegalArgumentException("genCodes have to be of equal length");
-//		}
-//		double[] resultGenCode = new double[genCode.length];
-//		for(int i = 0; i < resultGenCode.length; i++) {
-//			if(i < resultGenCode.length/2) {
-//				resultGenCode[i] = genCode[i];
-//			} else {
-//				resultGenCode[i] = other.getGenCode()[i];
-//			}
-//		}
-//		
-//		return new Genome(resultGenCode);
+		return new Genome(resultGenCode);
 	}
 	
 	public double[] getGenCode() {
