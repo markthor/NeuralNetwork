@@ -58,7 +58,6 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		input.add(booleanToZeroOrOne(isSecondNearestGhostEdibleFromNode(node, game)));
 		input.add(scaleDistance(getDistanceToNearestPowerPill(node, game)));
 		input.add(scaleDistance(getDistanceToNearestPill(node, game)));
-		
 		return input;
 	}
 	

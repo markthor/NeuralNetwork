@@ -62,7 +62,7 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 
-		evolve = true;
+		evolve = false;
 		readOld = false;
 		infinity = false;
 		readGen = 0;
@@ -77,7 +77,7 @@ public class Evolver {
 		parents = 2;
 		terminalFitness = 1300;
 		terminalGeneration = 500;
-		saveInterval = 100;
+		saveInterval = 10;
 		initialWeight = 0.0;
 		initialBias = 0.0;
 		numberOfEvaluationsPerChild = 10;
