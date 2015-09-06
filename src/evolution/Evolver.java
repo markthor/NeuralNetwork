@@ -14,7 +14,7 @@ import pacman.controllers.Controller;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
-import adapter.AdvancedNeuralNetworkController;
+import adapter.BlamBlamNeuralNetworkController;
 import adapter.NeuralNetworkController;
 import cli.CLIParser;
 
@@ -86,10 +86,11 @@ public class Evolver {
 		spawn = SpawnCriteria.Mutation;
 
 
-		//species = new Species(10, hiddenSize, 4);
-		//controller = new BlamBlamNeuralNetworkController(null);
-		species = new Species(22, hiddenSize, 4);
-		controller = new AdvancedNeuralNetworkController(null);
+
+		species = new Species(10, hiddenSize, 4);
+		controller = new BlamBlamNeuralNetworkController(null);
+		//species = new Species(14, hiddenSize, 4);
+		//controller = new EvaluationNeuralNetworkController(null);
 		ghostController = new StarterGhosts();
 	}
 	
