@@ -77,8 +77,13 @@ public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
 		List<Double> input = new ArrayList<Double>();
 		addGhosts(game, input);
 		addEdibleGhosts(game, input);
+		if (game.getActivePowerPillsIndices().length == 0) {
+			input.add(1.0);
+		} else {
+			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePowerPillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
+		}
 		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
-		input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePowerPillsIndices(), DM.MANHATTAN), DM.MANHATTAN)));
+		
 		return input;
 	}
 	
