@@ -28,6 +28,14 @@ public class BlamBlamNeuralNetworkController extends NeuralNetworkController {
 	}
 	
 	private void addGhosts(Game game, List<Double> input) {
+//		for(GHOST ghost : GHOST.values()) {
+//			if (!game.isGhostEdible(ghost)) {
+//				input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.MANHATTAN)));
+//			} else {
+//				input.add(1.0);
+//			}
+//		}
+		
 		if (!game.isGhostEdible(GHOST.BLINKY)) {
 			input.add(scaleDist(game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.MANHATTAN)));
 		} else {
