@@ -6,6 +6,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -47,7 +48,7 @@ public class CLIParser {
 		System.out.println("You have specified the following arguments (values shown):");
 		printArgs(getUsedArgs());
 		System.out.println("The following arguments are set to default settings (values shown):");
-		printArgs(getUnusedArgs());
+		printArgs(getUnusedArgs(getUsedArgs(), options));
 		
 	}
 	
@@ -192,134 +193,43 @@ public class CLIParser {
 		return usedArgs;
 	}
 	
-	private static ArrayList<String> getUnusedArgs() {
+	private static ArrayList<String> getUnusedArgs(ArrayList<String> usedArgs, Options options) {
 		unusedArgs = new ArrayList<String>();
-		
-		if (!usedArgs.contains(ARG1[0])) {
-			unusedArgs.add(ARG1[0]);
+		for (Option o : options.getOptions()) {
+			if (!usedArgs.contains(o.getOpt())) {
+				unusedArgs.add(o.getOpt());
+			}
 		}
-		if (!usedArgs.contains(ARG2[0])) {
-			unusedArgs.add(ARG2[0]);
-		}
-		if (!usedArgs.contains(ARG3[0])) {
-			unusedArgs.add(ARG3[0]);
-		}
-		if (!usedArgs.contains(ARG4[0])) {
-			unusedArgs.add(ARG4[0]);
-		}
-		if (!usedArgs.contains(ARG5[0])) {
-			unusedArgs.add(ARG5[0]);
-		}
-		if (!usedArgs.contains(ARG6[0])) {
-			unusedArgs.add(ARG6[0]);
-		}
-		if (!usedArgs.contains(ARG7[0])) {
-			unusedArgs.add(ARG7[0]);
-		}
-		if (!usedArgs.contains(ARG8[0])) {
-			unusedArgs.add(ARG8[0]);
-		}
-		if (!usedArgs.contains(ARG9[0])) {
-			unusedArgs.add(ARG9[0]);
-		}
-		if (!usedArgs.contains(ARG10[0])) {
-			unusedArgs.add(ARG10[0]);
-		}
-		if (!usedArgs.contains(ARG11[0])) {
-			unusedArgs.add(ARG11[0]);
-		}
-		if (!usedArgs.contains(ARG12[0])) {
-			unusedArgs.add(ARG12[0]);
-		}
-		if (!usedArgs.contains(ARG13[0])) {
-			unusedArgs.add(ARG13[0]);
-		}
-		if (!usedArgs.contains(ARG14[0])) {
-			unusedArgs.add(ARG14[0]);
-		}
-		if (!usedArgs.contains(ARG15[0])) {
-			unusedArgs.add(ARG15[0]);
-		}
-		if (!usedArgs.contains(ARG16[0])) {
-			unusedArgs.add(ARG16[0]);
-		}
-		if (!usedArgs.contains(ARG17[0])) {
-			unusedArgs.add(ARG17[0]);
-		}
-		if (!usedArgs.contains(ARG18[0])) {
-			unusedArgs.add(ARG18[0]);
-		}
-		if (!usedArgs.contains(ARG19[0])) {
-			unusedArgs.add(ARG19[0]);
-		}
-		
 		return unusedArgs;
 	}
 	
 	private static void printArgs(ArrayList<String> argList) {
-		/*
-		 * The second string begins after 40 characters. The dash means that the
-		 * first string is left-justified.
-		 */
-		String format = "%-20s%s%n";
+		printArg(argList, ARG1[0], ""+Evolver.evolve);
+		printArg(argList, ARG2[0], ""+Evolver.readOld);
+		printArg(argList, ARG3[0], ""+Evolver.infinity);
+		printArg(argList, ARG4[0], ""+Evolver.hiddenSize);
+		printArg(argList, ARG5[0], ""+Evolver.mutationProbability);
+		printArg(argList, ARG6[0], ""+Evolver.intensity);
+		printArg(argList, ARG7[0], ""+Evolver.readGen);
+		printArg(argList, ARG8[0], ""+Evolver.crossoverProbability);
+		printArg(argList, ARG9[0], ""+Evolver.sizeOfGeneration);
+		printArg(argList, ARG10[0], ""+Evolver.elitists);
+		printArg(argList, ARG11[0], ""+Evolver.terminalFitness);
+		printArg(argList, ARG12[0], ""+Evolver.terminalGeneration);
+		printArg(argList, ARG13[0], ""+Evolver.saveInterval);
+		printArg(argList, ARG14[0], ""+Evolver.parents);
+		printArg(argList, ARG15[0], ""+Evolver.numberOfEvaluationsPerChild);
+		printArg(argList, ARG16[0], ""+Evolver.selection);
+		printArg(argList, ARG17[0], ""+Evolver.spawn);
+		printArg(argList, ARG18[0], ""+Evolver.initialWeight);
+		printArg(argList, ARG19[0], ""+Evolver.initialBias);
+		System.out.println("");
+	}
 		
-		if (argList.contains(ARG1[0])) {
-			System.out.printf(format, "-" + ARG1[0] + ":", Evolver.evolve);
+	private static void printArg(ArrayList<String> argList, String flag, String val) {
+		String format = "%-20s%s%n";
+		if (argList.contains(flag)) {
+			System.out.printf(format, "-" + flag + ":", val);
 		}
-		if (argList.contains(ARG2[0])) {
-			System.out.printf(format, "-" + ARG2[0] + ":", Evolver.readOld);
-		}
-		if (argList.contains(ARG3[0])) {
-			System.out.printf(format, "-" + ARG3[0] + ":", Evolver.infinity);
-		}
-		if (argList.contains(ARG4[0])) {
-			System.out.printf(format, "-" + ARG4[0] + ":", Evolver.hiddenSize);
-		}
-		if (argList.contains(ARG5[0])) {
-			System.out.printf(format, "-" + ARG5[0] + ":", Evolver.mutationProbability);
-		}
-		if (argList.contains(ARG6[0])) {
-			System.out.printf(format, "-" + ARG6[0] + ":", Evolver.intensity);
-		}
-		if (argList.contains(ARG7[0])) {
-			System.out.printf(format, "-" + ARG7[0] + ":", Evolver.readGen);
-		}
-		if (argList.contains(ARG8[0])) {
-			System.out.printf(format, "-" + ARG8[0] + ":", Evolver.crossoverProbability);
-		}
-		if (argList.contains(ARG9[0])) {
-			System.out.printf(format, "-" + ARG9[0] + ":", Evolver.sizeOfGeneration);
-		}
-		if (argList.contains(ARG10[0])) {
-			System.out.printf(format, "-" + ARG10[0] + ":", Evolver.elitists);
-		}
-		if (argList.contains(ARG11[0])) {
-			System.out.printf(format, "-" + ARG11[0] + ":", Evolver.terminalFitness);
-		}
-		if (argList.contains(ARG12[0])) {
-			System.out.printf(format, "-" + ARG12[0] + ":", Evolver.terminalGeneration);
-		}
-		if (argList.contains(ARG13[0])) {
-			System.out.printf(format, "-" + ARG13[0] + ":", Evolver.saveInterval);
-		}
-		if (argList.contains(ARG14[0])) {
-			System.out.printf(format, "-" + ARG14[0] + ":", Evolver.parents);
-		}
-		if (argList.contains(ARG15[0])) {
-			System.out.printf(format, "-" + ARG15[0] + ":", Evolver.numberOfEvaluationsPerChild);
-		}
-		if (argList.contains(ARG16[0])) {
-			System.out.printf(format, "-" + ARG16[0] + ":", Evolver.selection);
-		}
-		if (argList.contains(ARG17[0])) {
-			System.out.printf(format, "-" + ARG17[0] + ":", Evolver.spawn);
-		}
-		if (argList.contains(ARG18[0])) {
-			System.out.printf(format, "-" + ARG18[0] + ":", Evolver.initialWeight);
-		}
-		if (argList.contains(ARG19[0])) {
-			System.out.printf(format, "-" + ARG19[0] + ":", Evolver.initialBias);
-		}
-		System.out.println("");	
 	}
 }
