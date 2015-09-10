@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Network {
 	private List<Neuron> inputNeurons;
+
 	private List<Neuron> outputNeurons;
 	private List<List<Neuron>> allNeurons;
 
@@ -114,6 +115,14 @@ public class Network {
 
 	public Genome getGenome() {
 		return genome;
+	}
+	
+	public List<Neuron> getInputNeurons() {
+		return inputNeurons;
+	}
+	
+	public List<Neuron> getOutputNeurons() {
+		return outputNeurons;
 	}
 	
 	public List<List<Neuron>> getAllNeurons() {
