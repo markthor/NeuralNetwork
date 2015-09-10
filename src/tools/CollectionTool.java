@@ -32,18 +32,6 @@ public class CollectionTool
 		return list.get(MathTool.getIntFromZeroAndIncludingZeroExcludingUpper(list.size()));
 	}
 	
-	public static List<Integer> removeElementFromIntegerList(List<Integer> list, int elementToRemove) {
-		Integer integerToRemove = null;
-		for(Integer i: list) {
-			if(i == elementToRemove) {
-				integerToRemove = i;
-			}
-		}
-		
-		list.remove(integerToRemove);
-		return new ArrayList<Integer>(list);
-	}
-	
 	public static int[] integerCollectionToIntegerArray(Collection<Integer> collection) {
 		int[] result = new int[collection.size()];
 		int i = 0;

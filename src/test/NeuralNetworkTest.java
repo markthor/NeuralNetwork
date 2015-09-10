@@ -3,12 +3,12 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
 import network.Genome;
 import network.Network;
 import network.Species;
 
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class NeuralNetworkTest {
 	@Test

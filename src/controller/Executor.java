@@ -14,6 +14,8 @@ public class Executor {
 		matrixData[1][2] = 3.0;
 		Matrix matrix1 = new Basic2DMatrix(matrixData);
 		
+		System.out.println(matrix1);
+		
 		double[][] matrixData2 = new double[1][3];
 		matrixData2[0][0] = 1.0;
 		matrixData2[0][1] = 3.0;

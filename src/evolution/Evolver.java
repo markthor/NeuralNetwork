@@ -63,8 +63,8 @@ public class Evolver {
 	private static void setDefaultArgs() {
 
 		evolve = false;
-		readOld = false;
-		infinity = false;
+		readOld = true;
+		infinity = true;
 		readGen = 0;
 		
 		// Evolution parameters
@@ -72,7 +72,7 @@ public class Evolver {
 		mutationProbability = 0.1;
 		intensity = 0.2;
 		crossoverProbability = 0.2;
-		sizeOfGeneration = 35;
+		sizeOfGeneration = 150;
 		elitists = 5;
 		parents = 2;
 		terminalFitness = 1300;
@@ -80,7 +80,7 @@ public class Evolver {
 		saveInterval = 10;
 		initialWeight = 0.0;
 		initialBias = 0.0;
-		numberOfEvaluationsPerChild = 10;
+		numberOfEvaluationsPerChild = 5;
 		
 		selection = SelectionCriteria.StochasticallyBasedOnRank;
 		spawn = SpawnCriteria.Mutation;
