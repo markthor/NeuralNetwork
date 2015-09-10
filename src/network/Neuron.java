@@ -37,6 +37,10 @@ public class Neuron {
 		return result + bias;
 	}
 	
+	public double addBiasAndActivate(double input) {
+		return MathTool.sigma(input + bias);
+	}
+	
 	public double activate(double sumInput) {
 		return MathTool.sigma(sumInput);
 	}

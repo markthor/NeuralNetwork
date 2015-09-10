@@ -24,7 +24,7 @@ public class NeuralNetworkTest {
 		
 		System.out.println(outputs.get(0));
 		
-		Assert.assertTrue(isCloseEnough(0.5525442441, outputs.get(0)));
+		Assert.assertTrue(isCloseEnough(0.5525197575, outputs.get(0)));
 	}
 	
 	@Test
@@ -39,7 +39,7 @@ public class NeuralNetworkTest {
 		inputs.add(-1.0);
 		List<Double> outputs = n.activateInputs(inputs);
 		
-		Assert.assertTrue(isCloseEnough(0.5526663088, outputs.get(0)));
+		Assert.assertTrue(isCloseEnough(0.5525311749, outputs.get(0)));
 	}
 	
 	@Test
@@ -56,7 +56,7 @@ public class NeuralNetworkTest {
 		inputs.add(-1.0);
 		List<Double> outputs = n.activateInputs(inputs);
 		
-		Assert.assertTrue(isCloseEnough(0.5600353417, outputs.get(0)));
+		Assert.assertTrue(isCloseEnough(0.5558727625, outputs.get(0)));
 	}
 	
 	private boolean isCloseEnough(double expected, double actual) {

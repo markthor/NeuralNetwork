@@ -61,7 +61,7 @@ public class Network {
 	
 	public List<Double> activateInputs(List<Double> inputs) {
 		for(int i = 0; i < inputs.size(); i++) {
-			inputNeurons.get(i).inputIntoAllSynapsis(inputs.get(i)+inputNeurons.get(i).getBias());
+			inputNeurons.get(i).inputIntoAllSynapsis(inputNeurons.get(i).addBiasAndActivate(inputs.get(i)));
 		}
 		for(int i = 1; i<species.getLayers()-1; i++) {
 			for(Neuron n: allNeurons.get(i)) {
