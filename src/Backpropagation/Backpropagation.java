@@ -3,9 +3,13 @@ package Backpropagation;
 import java.util.ArrayList;
 import java.util.List;
 
-import tools.MathTool;
 import network.Network;
 import network.Neuron;
+
+import org.la4j.Vector;
+import org.la4j.vector.dense.BasicVector;
+
+import tools.MathTool;
 
 public class Backpropagation {
 	private Network network;
@@ -28,16 +32,16 @@ public class Backpropagation {
 		
 	}
 	
-	private List<List<Double>> errorMatrix(int layers, List<Double> inputs) {
-		List<List<Double>> errorMatrix = new ArrayList<List<Double>>();
-		initializeMatrixList(errorMatrix, layers);
-
+	private List<Vector> errorVectors(int layers, List<Double> inputs) {
+		List<Vector> errorVectors = new ArrayList<>();
+		
+		double[] errors = new double[network.getOutputNeurons().size()];
 		int j = 0;
 		for (Neuron n : network.getOutputNeurons()) {
-			errorMatrix.get(layers-1).add(getError(n.output(), n.rawActivationInput(), j,
-					inputs));
+			errors[j] = getError(n.output(), n.rawActivationInput(), j, inputs);
 			j++;
 		}
+		errorVectors.add(new BasicVector(errors));
 		
 		// When the initial error vector is calculated, calculate back through the network
 		for(int l = layers-1; l > 0; l++) {
@@ -45,16 +49,10 @@ public class Backpropagation {
 		}
 		
 		
-		return errorMatrix;
+		return errorVectors;
 	}
 	
 	private double getError(double a, double z, int j, List<Double> inputs) {
 		return function.derivative(a, j, inputs) * MathTool.sigmaDerivative(z);
-	}
-	
-	private void initializeMatrixList(List<List<Double>> matrix, int layers) {
-		for (int i = 0; i < layers; i++) {
-			matrix.add(new ArrayList<Double>());
-		}
 	}
 }
