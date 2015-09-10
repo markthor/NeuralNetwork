@@ -26,15 +26,23 @@ public class Neuron {
 	}
 	
 	public double output() {
+		return activate(rawActivationInput());
+	}
+	
+	public double rawActivationInput() {
 		double result = 0;
 		for(Synapsis s: inputSynapsis) {
 			result = result + s.output();
 		}
-		return activate(result);
+		return result + bias;
+	}
+	
+	public double addBiasAndActivate(double input) {
+		return MathTool.sigma(input + bias);
 	}
 	
 	public double activate(double sumInput) {
-		return MathTool.sigma(sumInput + bias);
+		return MathTool.sigma(sumInput);
 	}
 	
 	public void readAndOutput() {
@@ -59,6 +67,10 @@ public class Neuron {
 
 	public void setBias(double bias) {
 		this.bias = bias;
+	}
+	
+	public List<Synapsis> getInputSynapsis() {
+		return inputSynapsis;
 	}
 	
 	public List<Synapsis> getOutputSynapsis() {

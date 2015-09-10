@@ -17,6 +17,10 @@ public class MathTool {
 		return 1 / (1+ FastMath.pow(Math.E, -z));
 	}
 	
+	public static double sigmaDerivative(double z) {
+		return FastMath.pow(Math.E, -z) / FastMath.pow((1+FastMath.pow(Math.E, -z)), 2);
+	}
+	
 	public static double getNormalDistribution() {
 		return nd.sample();
 	}

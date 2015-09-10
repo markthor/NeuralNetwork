@@ -3,12 +3,12 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
 import network.Genome;
 import network.Network;
 import network.Species;
 
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class NeuralNetworkTest {
 	@Test
@@ -24,7 +24,7 @@ public class NeuralNetworkTest {
 		
 		System.out.println(outputs.get(0));
 		
-		Assert.assertTrue(isCloseEnough(0.5525442441, outputs.get(0)));
+		Assert.assertTrue(isCloseEnough(0.5525197575, outputs.get(0)));
 	}
 	
 	@Test
@@ -39,7 +39,7 @@ public class NeuralNetworkTest {
 		inputs.add(-1.0);
 		List<Double> outputs = n.activateInputs(inputs);
 		
-		Assert.assertTrue(isCloseEnough(0.5526663088, outputs.get(0)));
+		Assert.assertTrue(isCloseEnough(0.5525311749, outputs.get(0)));
 	}
 	
 	@Test
@@ -56,7 +56,7 @@ public class NeuralNetworkTest {
 		inputs.add(-1.0);
 		List<Double> outputs = n.activateInputs(inputs);
 		
-		Assert.assertTrue(isCloseEnough(0.5600353417, outputs.get(0)));
+		Assert.assertTrue(isCloseEnough(0.5558727625, outputs.get(0)));
 	}
 	
 	private boolean isCloseEnough(double expected, double actual) {

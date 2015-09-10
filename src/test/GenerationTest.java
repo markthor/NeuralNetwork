@@ -1,11 +1,11 @@
 package test;
 
-import junit.framework.Assert;
 import network.Genome;
 import network.Network;
 import network.Species;
 
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import tools.MathTool;
 import evolution.Generation;
@@ -19,6 +19,5 @@ public class GenerationTest {
 		Network parent = new Network(g, s);
 		
 		Generation generation = new Generation(1, parent, 5, MathTool.getNormalDistribution(), MathTool.getNormalDistribution());
-		//Assert.assertTrue(condition);
 	}
 }

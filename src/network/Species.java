@@ -11,7 +11,7 @@ public class Species {
 	private int layers;
 
 	public Species(Integer... numberOfNeuronsAtlayer) {
-		this.numberOfNeuronsAtlayer = new ArrayList<Integer>(Arrays.asList(numberOfNeuronsAtlayer));
+		this.numberOfNeuronsAtlayer = Arrays.asList(numberOfNeuronsAtlayer);
 		layers = this.numberOfNeuronsAtlayer.size();
 		calculateNumberOfNeurons();
 		calculateNumberOfSynapsis();

@@ -100,7 +100,7 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		ghostNodes.add(game.getGhostCurrentNodeIndex(GHOST.PINKY));
 		
 		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), CollectionTool.integerCollectionToIntegerArray(ghostNodes), DM.MANHATTAN);
-		ghostNodes = CollectionTool.removeElementFromIntegerList(ghostNodes, nearestGhostNode);
+		ghostNodes.remove(new Integer(nearestGhostNode));
 		
 		if(ghostNodes.size() != 3) {
 			throw new IllegalStateException("Should not happen, revise code");
@@ -141,7 +141,7 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		ghostNodes.add(game.getGhostCurrentNodeIndex(GHOST.PINKY));
 		
 		int nearestGhostNode = game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), CollectionTool.integerCollectionToIntegerArray(ghostNodes), DM.MANHATTAN);
-		ghostNodes = CollectionTool.removeElementFromIntegerList(ghostNodes, nearestGhostNode);
+		ghostNodes.remove(new Integer(nearestGhostNode));
 		
 		if(ghostNodes.size() != 3) {
 			throw new IllegalStateException("Should not happen, revise code");

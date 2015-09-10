@@ -24,7 +24,7 @@ public class Genome {
 	public void mutate(double chanceOfMutation, double intensity) {
 		for(int i = 0; i < genCode.length; i++) {
 			if(MathTool.getNumberBetweenZeroAndOne() < chanceOfMutation)
-				genCode[i] = genCode[i] + (MathTool.getNormalDistribution() * intensity);
+				genCode[i] =+ (MathTool.getNormalDistribution() * intensity);
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class Genome {
 		
 		double[] resultGenCode = new double[genCode.length];
 		for(int i = 0; i < resultGenCode.length; i++) {
-			if(MathTool.getDoubleBetweenZeroAnd(1) < 0.5) {
+			if(MathTool.getNumberBetweenZeroAndOne() < 0.5) {
 				resultGenCode[i] = genCode[i];
 			} else {
 				resultGenCode[i] = other.getGenCode()[i];
