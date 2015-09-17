@@ -2,15 +2,15 @@
 <testng-results skipped="0" failed="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="62" started-at="2015-09-10T13:04:14Z" finished-at="2015-09-10T13:04:14Z">
+  <suite name="Default suite" duration-ms="78" started-at="2015-09-15T21:28:51Z" finished-at="2015-09-15T21:28:51Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="62" started-at="2015-09-10T13:04:14Z" finished-at="2015-09-10T13:04:14Z">
+    <test name="Default test" duration-ms="78" started-at="2015-09-15T21:28:51Z" finished-at="2015-09-15T21:28:51Z">
       <class name="test.BackpropagationTest$GenerationTest">
-        <test-method status="PASS" signature="testBackPropagtionWeightMatrix()[pri:0, instance:test.BackpropagationTest$GenerationTest@21a06946]" name="testBackPropagtionWeightMatrix" duration-ms="47" started-at="2015-09-10T15:04:14Z" finished-at="2015-09-10T15:04:14Z">
+        <test-method status="PASS" signature="testBackPropagtion()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testBackPropagtion" duration-ms="78" started-at="2015-09-15T23:28:51Z" finished-at="2015-09-15T23:28:51Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testBackPropagtionWeightMatrix -->
+        </test-method> <!-- testBackPropagtion -->
       </class> <!-- test.BackpropagationTest$GenerationTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->

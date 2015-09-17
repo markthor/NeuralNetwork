@@ -69,6 +69,10 @@ public class Neuron {
 		this.bias = bias;
 	}
 	
+	public void modifyBias(double delta) {
+		bias += delta;
+	}
+	
 	public List<Synapsis> getInputSynapsis() {
 		return inputSynapsis;
 	}

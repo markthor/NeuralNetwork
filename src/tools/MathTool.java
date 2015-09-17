@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.util.FastMath;
+import org.la4j.Vector;
+import org.la4j.vector.dense.BasicVector;
 
 public class MathTool {
 	public static Random random = new Random();
@@ -15,6 +17,14 @@ public class MathTool {
 	
 	public static double sigma(double z) {
 		return 1 / (1+ FastMath.pow(Math.E, -z));
+	}
+	
+	public static Vector sigmaDerivativeVector(Vector z) {
+		double[] vectorData = new double[z.length()];
+		for (int i = 0; i < z.length(); i++) {
+			vectorData[i] = sigmaDerivative(z.get(i));
+		}
+		return new BasicVector(vectorData);
 	}
 	
 	public static double sigmaDerivative(double z) {

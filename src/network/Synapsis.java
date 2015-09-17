@@ -20,6 +20,14 @@ public class Synapsis {
 		lastInput = input;
 	}
 	
+	public Neuron getInputNeuron() {
+		return inputNeuron;
+	}
+
+	public Neuron getOutputNeuron() {
+		return outputNeuron;
+	}
+
 	public double output() {
 		return lastInput * weight;
 	}
@@ -30,6 +38,10 @@ public class Synapsis {
 	
 	public void setWeight(double weight) {
 		this.weight = weight;
+	}
+	
+	public void modifyWeight(double delta) {
+		weight += delta;
 	}
 	
 	public String toString() {
