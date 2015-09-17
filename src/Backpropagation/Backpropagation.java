@@ -15,6 +15,7 @@ import org.la4j.vector.dense.BasicVector;
 
 import tools.MathTool;
 
+
 public class Backpropagation {
 	private Network network;
 	private CostFunction function;

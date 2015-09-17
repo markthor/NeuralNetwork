@@ -13,8 +13,6 @@ import tools.CollectionTool;
 
 public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNetworkController {
 
-	protected static final double MAX_DISTANCE = 255.0;
-	
 	public SimpleEvaluationNeuralNetworkController(Network network) {
 		super(network);
 
@@ -26,31 +24,8 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		return getBestMove(game);
 	}
 	
-	private MOVE getBestMove(Game game) {
-		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
-		
-		int highestNeighbour = -1;
-		double highestNeighbourScore = -1.0;
-		for(int i = 0; i < neighbours.length; i++) {
-			double evaluation = evaluateNode(neighbours[i], game);
-			if(evaluateNode(neighbours[i], game) > highestNeighbourScore) {
-				highestNeighbourScore = evaluation;
-				highestNeighbour = neighbours[i];
-			}
-		}
-		
-		if(highestNeighbour == -1) {
-			throw new IllegalStateException("Should not happen, revise code");
-		}
-		
-		return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), highestNeighbour, DM.MANHATTAN);
-	}
-	
-	private double evaluateNode(int node, Game game) {
-		return network.activateInputs(getInputFromGameStateAndNode(node, game)).get(0);
-	}
-	
-	private List<Double> getInputFromGameStateAndNode(int node, Game game) {
+	@Override
+	protected List<Double> getInputFromGameStateAndNode(int node, Game game) {
 		List<Double> input = new ArrayList<Double>();
 		input.add(scaleDistance(getDistanceToNearestGhostFromNode(node, game)));
 		input.add(scaleDistance(getDistanceToSecondNearestGhostFromNode(node, game)));
@@ -59,26 +34,6 @@ public class SimpleEvaluationNeuralNetworkController extends EvaluationNeuralNet
 		input.add(scaleDistance(getDistanceToNearestPowerPill(node, game)));
 		input.add(scaleDistance(getDistanceToNearestPill(node, game)));
 		return input;
-	}
-	
-	protected double scaleDistance(double distance) {
-		return distance/MAX_DISTANCE;
-	}
-	
-	protected double getDistanceToNearestPowerPill(int node, Game game) {
-		int[] powerPills = game.getActivePowerPillsIndices();
-		if(powerPills.length == 0) {
-			return 1.0;
-		}
-		return game.getDistance(node, game.getClosestNodeIndexFromNodeIndex(node, powerPills, DM.MANHATTAN), DM.MANHATTAN);
-	}
-	
-	protected double getDistanceToNearestPill(int node, Game game) {
-		int[] pills = game.getActivePillsIndices();
-		if(pills.length == 0) {
-			return 1.0;
-		}
-		return game.getDistance(node, game.getClosestNodeIndexFromNodeIndex(node, pills, DM.MANHATTAN), DM.MANHATTAN);
 	}
 	
 	protected double getDistanceToNearestGhostFromNode(int node, Game game) {

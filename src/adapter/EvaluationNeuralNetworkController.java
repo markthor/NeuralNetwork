@@ -15,6 +15,8 @@ import pacman.game.internal.Ghost;
 
 public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 	
+	protected static final double MAX_DISTANCE = 255.0;
+	
 	public EvaluationNeuralNetworkController(Network network) {
 		super(network);
 	}
@@ -22,7 +24,39 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
 		currentGeneration.addFitnessToNetwork(numberOftries, game.getScore(), network);
-		return getMoveFromOutput(network.activateInputs(getInputFromGameState(game)));
+		return getBestMove(game);
+	}
+	
+	protected MOVE getBestMove(Game game) {
+		int[] neighbours = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+		
+		int highestNeighbour = -1;
+		double highestNeighbourScore = -1.0;
+		for(int i = 0; i < neighbours.length; i++) {
+			double evaluation = evaluateNode(neighbours[i], game);
+			if(evaluateNode(neighbours[i], game) > highestNeighbourScore) {
+				highestNeighbourScore = evaluation;
+				highestNeighbour = neighbours[i];
+			}
+		}
+		
+		if(highestNeighbour == -1) {
+			throw new IllegalStateException("Should not happen, revise code");
+		}
+		
+		return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), highestNeighbour, DM.MANHATTAN);
+	}
+	
+	protected double evaluateNode(int node, Game game) {
+		return network.activateInputs(getInputFromGameStateAndNode(node, game)).get(0);
+	}
+	
+	protected List<Double> getInputFromGameStateAndNode(int node, Game game) { 
+		return new ArrayList<Double>();
+	}
+	
+	protected double scaleDistance(double distance) {
+		return distance/MAX_DISTANCE;
 	}
 	
 	private List<Double> getInputFromGameState(Game game) {
@@ -172,5 +206,21 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 		addZeroOrOneToInput(input, moves, MOVE.LEFT);
 		addZeroOrOneToInput(input, moves, MOVE.UP);
 		addZeroOrOneToInput(input, moves, MOVE.DOWN);
+	}
+	
+	protected double getDistanceToNearestPowerPill(int node, Game game) {
+		int[] powerPills = game.getActivePowerPillsIndices();
+		if(powerPills.length == 0) {
+			return 1.0;
+		}
+		return game.getDistance(node, game.getClosestNodeIndexFromNodeIndex(node, powerPills, DM.MANHATTAN), DM.MANHATTAN);
+	}
+	
+	protected double getDistanceToNearestPill(int node, Game game) {
+		int[] pills = game.getActivePillsIndices();
+		if(pills.length == 0) {
+			return 1.0;
+		}
+		return game.getDistance(node, game.getClosestNodeIndexFromNodeIndex(node, pills, DM.MANHATTAN), DM.MANHATTAN);
 	}
 }
