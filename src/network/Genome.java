@@ -1,6 +1,9 @@
 package network;
 
 import java.util.Arrays;
+import java.util.Random;
+import java.util.PrimitiveIterator.OfDouble;
+import java.util.stream.DoubleStream;
 
 import tools.MathTool;
 
@@ -25,6 +28,15 @@ public class Genome {
 		for(int i = 0; i < genCode.length; i++) {
 			if(MathTool.getNumberBetweenZeroAndOne() < chanceOfMutation)
 				genCode[i] =+ (MathTool.getNormalDistribution() * intensity);
+		}
+	}
+	
+	public void mutateHeavy(double from, double to) {
+		Random rand = new Random();
+		DoubleStream ds = rand.doubles(-10, 10);
+		OfDouble it = ds.iterator();
+		for (int i = 0; i < genCode.length; i++) {
+			genCode[i] += it.nextDouble();
 		}
 	}
 	

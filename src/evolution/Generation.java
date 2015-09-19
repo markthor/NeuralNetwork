@@ -25,6 +25,10 @@ public class Generation {
 		
 		inputNetworks.addAll(previousGeneration.getTopNetworksWithHighestFitness(numberOfElitists));
 		
+		if(selection == SelectionCriteria.All) {
+			parents.addAll(previousGeneration.getTopNetworksWithHighestFitness(size-numberOfElitists));
+			numberOfParents = size-numberOfElitists;
+		}
 		if(selection == SelectionCriteria.Fittest) {
 			parents.addAll(previousGeneration.getTopNetworksWithHighestFitness(numberOfParents));
 		}
@@ -93,7 +97,7 @@ public class Generation {
 		List<Network> inputNetworks = new ArrayList<Network>(size);
 		for(int i = 0; i < size-1; i++) {
 			Genome mutatedGenome = parent.getGenome().clone();
-			mutatedGenome.mutate(chanceOfMutation, intensity);
+			mutatedGenome.mutateHeavy(-10, 10);
 			inputNetworks.add(new Network(mutatedGenome, parent.getSpecies()));
 		}
 		inputNetworks.add(new Network(parent.getGenome().clone(), parent.getSpecies()));

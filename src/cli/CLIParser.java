@@ -35,7 +35,7 @@ public class CLIParser {
 	private static final String[] ARG13 = {"si", "save-interval", "Save every N'th generation to file (int)"};
 	private static final String[] ARG14 = {"p", "parents", "Number of parents used for seeding each generation (int)"};
 	private static final String[] ARG15 = {"C", "child-evaluations", "Number of evaluations per child (Increase to reduce RNG-noise) (int)"};
-	private static final String[] ARG16 = {"sel", "selection", "Criteria for selecting seeds for new generations. Options: byRank, ByFitness, Fittest"};
+	private static final String[] ARG16 = {"sel", "selection", "Criteria for selecting seeds for new generations. Options: byRank, ByFitness, Fittest, all"};
 	private static final String[] ARG17 = {"sc", "spawn", "Criteria for spawning seeds for new generations. Options: mutation, crossover"};
 	private static final String[] ARG18 = {"w", "weight", "Initial weight for initialization of each synapsis (double)"};
 	private static final String[] ARG19 = {"b", "bias", "Initial bias for initialization of each synapsis (double)"};
@@ -159,6 +159,7 @@ public class CLIParser {
 		    	case "byRank": 		Evolver.selection = SelectionCriteria.StochasticallyBasedOnRank; break;
 		    	case "byFitness": 	Evolver.selection = SelectionCriteria.StochasticallyBasedOnFitness; break;
 		    	case "Fittest": 	Evolver.selection = SelectionCriteria.Fittest; break;
+		    	case "all": 		Evolver.selection = SelectionCriteria.All; break;
 		    	default: 			System.out.println("\"" + line.getOptionValue(ARG1[16]) + "\" is not a valid argument for -" + ARG16[0]); 
 		    						System.exit(1); break;
 		    	}

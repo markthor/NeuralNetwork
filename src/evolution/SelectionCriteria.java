@@ -1,5 +1,5 @@
 package evolution;
 
 public enum SelectionCriteria {
-	StochasticallyBasedOnFitness, StochasticallyBasedOnRank, Fittest
+	StochasticallyBasedOnFitness, StochasticallyBasedOnRank, Fittest, All
 }

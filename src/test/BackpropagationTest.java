@@ -12,10 +12,10 @@ import org.la4j.vector.dense.BasicVector;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import backpropagation.Backpropagation;
+import backpropagation.LinearFunction;
+import backpropagation.SinusFunction;
 import tools.MathTool;
-import Backpropagation.Backpropagation;
-import Backpropagation.LinearFunction;
-import Backpropagation.SinusFunction;
 
 public class BackpropagationTest {
 	public class GenerationTest {
@@ -24,15 +24,27 @@ public class BackpropagationTest {
 			int size = 5;
 			Species s = new Species(1, 10, 1);
 			Genome g = new Genome(s, 0, 0);
-			g.mutate(1, 0.1);
+			g.mutateHeavy(-3, 3);
 			Network n = new Network(g, s);
 			
-			Backpropagation bp = new Backpropagation(n, new LinearFunction(), 0.15);
-			bp.backpropagateUntilSatuated();
+			Backpropagation bp = new Backpropagation(n, new SinusFunction(), 0.1, 20);
+			bp.iterativelyBackpropagate(100000);
 			
 			ArrayList<Double> inputs = new ArrayList<Double>();
+			inputs.add(0.1);
+			System.out.println("Test: " + n.activateInputs(inputs).get(0));
+			inputs = new ArrayList<Double>();
 			inputs.add(0.3);
-			System.out.println(n.activateInputs(inputs).get(0));
+			System.out.println("Test: " + n.activateInputs(inputs).get(0));
+			inputs = new ArrayList<Double>();
+			inputs.add(0.5);
+			System.out.println("Test: " + n.activateInputs(inputs).get(0));
+			inputs = new ArrayList<Double>();
+			inputs.add(0.7);
+			System.out.println("Test: " + n.activateInputs(inputs).get(0));
+			inputs = new ArrayList<Double>();
+			inputs.add(0.9);
+			System.out.println("Test: " + n.activateInputs(inputs).get(0));
 		}
 		
 		@Test
@@ -42,7 +54,7 @@ public class BackpropagationTest {
 			Genome g = new Genome(s, MathTool.getNormalDistribution(), MathTool.getNormalDistribution());
 			Network n = new Network(g, s);
 			
-			Backpropagation bp = new Backpropagation(n, new SinusFunction(), 0.1);
+			Backpropagation bp = new Backpropagation(n, new SinusFunction(), 0.1, 10);
 			Matrix matrix = bp.getWeightMetrix(3);
 			Assert.assertEquals(matrix.rows(), 2);
 			Assert.assertEquals(matrix.columns(), 3);

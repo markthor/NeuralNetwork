@@ -213,7 +213,7 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 		if(powerPills.length == 0) {
 			return 1.0;
 		}
-		return game.getDistance(node, game.getClosestNodeIndexFromNodeIndex(node, powerPills, DM.MANHATTAN), DM.MANHATTAN);
+		return game.getShortestPathDistance(node, game.getClosestNodeIndexFromNodeIndex(node, powerPills, DM.PATH));
 	}
 	
 	protected double getDistanceToNearestPill(int node, Game game) {
@@ -221,6 +221,6 @@ public class EvaluationNeuralNetworkController extends NeuralNetworkController {
 		if(pills.length == 0) {
 			return 1.0;
 		}
-		return game.getDistance(node, game.getClosestNodeIndexFromNodeIndex(node, pills, DM.MANHATTAN), DM.MANHATTAN);
+		return game.getShortestPathDistance(node, game.getClosestNodeIndexFromNodeIndex(node, pills, DM.PATH));
 	}
 }

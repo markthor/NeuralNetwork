@@ -1,8 +1,11 @@
-package Backpropagation;
+package backpropagation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.PrimitiveIterator.OfInt;
+import java.util.Random;
 
 import network.Network;
 import network.Neuron;
@@ -20,32 +23,51 @@ public class Backpropagation {
 	private Network network;
 	private CostFunction function;
 	private double learningRate;
+	private int miniBatchSize;
 	
-	public Backpropagation(Network network, CostFunction function, double learningRate) {
+	public Backpropagation(Network network, CostFunction function, double learningRate, int miniBatchSize) {
 		super();
 		this.network = network;
 		this.function = function;
 		this.learningRate = learningRate;
+		this.miniBatchSize = miniBatchSize;
 	}
 
-	public void backpropagateUntilSatuated() {
+	public void iterativelyBackpropagate(int iterations) {
 		ArrayList<Double> trainingSet = new ArrayList<Double>();
-		for(double d = 0; d <= 1.0; d=d+0.01) {
+		for(double d = 0; d <= 1.0; d=d+0.001) {
 			trainingSet.add(d);
 		}
-		int numberOfRunsTest = 0;
-		for(double cost = averageCost(trainingSet); cost>0.005; cost=averageCost(trainingSet)) {
-			for(Double d: trainingSet) {
+				
+		for(int i = 0; i < iterations; i++) {
+			List<Double> miniBatch = getMiniBatch(trainingSet);
+			BatchResult br = new BatchResult();
+			for(Double d: miniBatch) {
 				ArrayList<Double> inputs = new ArrayList<Double>();
 				inputs.add(d);
-				backpropagate(inputs);
+				br.addBPResult(backpropagate(inputs));
 			}
-			Collections.shuffle(trainingSet);
-			numberOfRunsTest++;
-			if(numberOfRunsTest % 1000 == 0) {
-				System.out.println(cost);
+			
+			List<Matrix> weightPartialDerivatives = br.getAverageWeightPartialDerivatives();
+			List<Vector> biasPartialDerivatives = br.getAverageBiasPartialDerivatives();
+			
+			updateWeights(weightPartialDerivatives);
+			updateBiases(biasPartialDerivatives);
+			
+			if(i % 50 == 0) {
+				System.out.println(averageCost(trainingSet));
 			}
 		}
+	}
+	
+	public List<Double> getMiniBatch(ArrayList<Double> trainingSet) {
+		ArrayList<Double> miniBatch = new ArrayList<Double>(miniBatchSize);
+		Random r = new Random();
+		OfInt iterator = r.ints().iterator();
+		for(int i = 0; i < miniBatchSize; i++) {
+			miniBatch.add(trainingSet.get(Math.abs(iterator.next()%trainingSet.size())));
+		}
+		return miniBatch;
 	}
 	
 	private double averageCost(List<Double> trainingSet) {
@@ -58,21 +80,19 @@ public class Backpropagation {
 		return sum / ((double)trainingSet.size());
 	}
 	
-	private void backpropagate(List<Double> inputs) {
-		List<Double> output = network.activateInputs(inputs);
-		Vector[] errorVectors = errorVectors(network.getSpecies().getLayers(),
-				inputs);
+	private BPResult backpropagate(List<Double> inputs) {
+		network.activateInputs(inputs);
+		Vector[] errorVectors = errorVectors(network.getSpecies().getLayers(), inputs);
 		List<Matrix> weightPartialDerivatives = getWeightPartialDerivatives(errorVectors);
-		updateBiases(errorVectors);
-		updateWeights(weightPartialDerivatives);
-
+		List<Vector> biasPartialDerivatives = getBiasPartialDerivatives(errorVectors);
+		return new BPResult(weightPartialDerivatives, biasPartialDerivatives);
 	}
 	
-	private void updateBiases(Vector[] errorVectors) {
+	private void updateBiases(List<Vector> biasPartialDerivatives) {
 		for (int layer = 1; layer <= network.getSpecies().getLayers(); layer++) {
 			int neuronNumber = 0;
 			for(Neuron n: network.getAllNeurons().get(layer-1)) {
-				n.modifyBias((-learningRate)*errorVectors[layer-1].get(neuronNumber));
+				n.modifyBias((-learningRate)*biasPartialDerivatives.get(layer-1).get(neuronNumber));
 				neuronNumber++;
 			}
 		}
@@ -90,6 +110,10 @@ public class Backpropagation {
 				neuronNumber++;
 			}
 		}
+	}
+	
+	private List<Vector> getBiasPartialDerivatives(Vector[] errorVectors) {
+		return Arrays.asList(errorVectors);
 	}
 	
 	private List<Matrix> getWeightPartialDerivatives(Vector[] errorVectors) {

@@ -14,6 +14,7 @@ import pacman.controllers.Controller;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
+import adapter.MikkelsController;
 import adapter.ModerateEvaluationNeuralNetworkController;
 import adapter.NeuralNetworkController;
 import cli.CLIParser;
@@ -62,13 +63,13 @@ public class Evolver {
 	
 	private static void setDefaultArgs() {
 
-		evolve = true;
+		evolve = false;
 		readOld = false;
-		infinity = true;
+		infinity = false;
 		readGen = 0;
 		
 		// Evolution parameters
-		hiddenSize = 5;
+		hiddenSize = 3;
 		mutationProbability = 0.1;
 		intensity = 0.2;
 		crossoverProbability = 0.2;
@@ -82,7 +83,7 @@ public class Evolver {
 		initialBias = 0.0;
 		numberOfEvaluationsPerChild = 5;
 		
-		selection = SelectionCriteria.Fittest;
+		selection = SelectionCriteria.All;
 		spawn = SpawnCriteria.Mutation;
 
 

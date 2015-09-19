@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="1" passed="1">
+<testng-results skipped="0" failed="0" total="3" passed="3">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="78" started-at="2015-09-15T21:28:51Z" finished-at="2015-09-15T21:28:51Z">
+  <suite name="Default suite" duration-ms="23468" started-at="2015-09-19T10:19:34Z" finished-at="2015-09-19T10:19:58Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="78" started-at="2015-09-15T21:28:51Z" finished-at="2015-09-15T21:28:51Z">
+    <test name="Default test" duration-ms="23468" started-at="2015-09-19T10:19:34Z" finished-at="2015-09-19T10:19:58Z">
       <class name="test.BackpropagationTest$GenerationTest">
-        <test-method status="PASS" signature="testBackPropagtion()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testBackPropagtion" duration-ms="78" started-at="2015-09-15T23:28:51Z" finished-at="2015-09-15T23:28:51Z">
+        <test-method status="PASS" signature="testApplySigmaDerivativeOnVector()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testApplySigmaDerivativeOnVector" duration-ms="40" started-at="2015-09-19T12:19:34Z" finished-at="2015-09-19T12:19:34Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testApplySigmaDerivativeOnVector -->
+        <test-method status="PASS" signature="testBackPropagtion()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testBackPropagtion" duration-ms="23408" started-at="2015-09-19T12:19:34Z" finished-at="2015-09-19T12:19:58Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testBackPropagtion -->
+        <test-method status="PASS" signature="testBackPropagtionWeightMatrixDimensions()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testBackPropagtionWeightMatrixDimensions" duration-ms="10" started-at="2015-09-19T12:19:58Z" finished-at="2015-09-19T12:19:58Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBackPropagtionWeightMatrixDimensions -->
       </class> <!-- test.BackpropagationTest$GenerationTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->

@@ -24,13 +24,21 @@ public class ModerateEvaluationNeuralNetworkController extends EvaluationNeuralN
 		input.add(scaleDistance(getDistanceToGhostFromNode(GHOST.INKY, game, node)));
 		input.add(scaleDistance(getDistanceToGhostFromNode(GHOST.PINKY, game, node)));
 		input.add(scaleDistance(getDistanceToGhostFromNode(GHOST.SUE, game, node)));
-		input.add(scaleTimeToEat(game.getGhostEdibleTime(GHOST.BLINKY)));
-		input.add(scaleTimeToEat(game.getGhostEdibleTime(GHOST.INKY)));
-		input.add(scaleTimeToEat(game.getGhostEdibleTime(GHOST.PINKY)));
-		input.add(scaleTimeToEat(game.getGhostEdibleTime(GHOST.SUE)));
+		input.add(isGhostEdible(GHOST.BLINKY, game));
+		input.add(isGhostEdible(GHOST.INKY, game));
+		input.add(isGhostEdible(GHOST.PINKY, game));
+		input.add(isGhostEdible(GHOST.SUE, game));
 		input.add(scaleDistance(getDistanceToNearestPowerPill(node, game)));
 		input.add(scaleDistance(getDistanceToNearestPill(node, game)));
 		return input;
+	}
+	
+	protected double isGhostEdible(GHOST ghost, Game game) {
+		if(game.isGhostEdible(ghost)) {
+			return 1.0;
+		} else {
+			return 0.0;
+		}
 	}
 	
 	protected double scaleTimeToEat(int timeToEat) {
@@ -38,7 +46,6 @@ public class ModerateEvaluationNeuralNetworkController extends EvaluationNeuralN
 	}
 	
 	protected double getDistanceToGhostFromNode(GHOST ghost, Game game, int node) {
-		return game.getDistance(node, game.getGhostCurrentNodeIndex(ghost), DM.MANHATTAN);
-		
+		return game.getShortestPathDistance(node, game.getGhostCurrentNodeIndex(ghost));
 	}
 }

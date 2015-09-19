@@ -1,4 +1,4 @@
-package Backpropagation;
+package backpropagation;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ public class SinusFunction implements CostFunction {
 	@Override
 	public double cost(double a, int outputIndex, List<Double> inputs) {
 		if(outputIndex != 0) throw new IllegalArgumentException();
-		return FastMath.pow(a - scaledSin(inputs.get(0)), 2);
+		return FastMath.pow(a - scaledSin(inputs.get(0)), 2)/2.0;
 	}
 
 	@Override
 	public double derivative(double a, int outputIndex, List<Double> inputs) {
 		if(outputIndex != 0) throw new IllegalArgumentException();
-		return (2 * a) - (2*scaledSin(inputs.get(0)));
+		return a - scaledSin(inputs.get(0));
 	}
 	
 	private double scaledSin(double input) {

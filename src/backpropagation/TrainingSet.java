@@ -1,4 +1,4 @@
-package Backpropagation;
+package backpropagation;
 
 import java.util.List;
 
