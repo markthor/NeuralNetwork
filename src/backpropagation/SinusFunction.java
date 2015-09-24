@@ -18,7 +18,7 @@ public class SinusFunction implements CostFunction {
 		return a - scaledSin(inputs.get(0));
 	}
 	
-	private double scaledSin(double input) {
+	public double scaledSin(double input) {
 		return (FastMath.sin(input*2*Math.PI)/2)+0.5;
 	}
 }

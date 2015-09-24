@@ -33,18 +33,13 @@ public class Backpropagation {
 		this.miniBatchSize = miniBatchSize;
 	}
 
-	public void iterativelyBackpropagate(int iterations) {
-		ArrayList<Double> trainingSet = new ArrayList<Double>();
-		for(double d = 0; d <= 1.0; d=d+0.001) {
-			trainingSet.add(d);
-		}
-				
+	public void iterativelyBackpropagate(int iterations, List<TrainingEntry> trainingSet) {			
 		for(int i = 0; i < iterations; i++) {
-			List<Double> miniBatch = getMiniBatch(trainingSet);
+			List<TrainingEntry> miniBatch = getMiniBatch(trainingSet);
 			BatchResult br = new BatchResult();
-			for(Double d: miniBatch) {
+			for(TrainingEntry te: miniBatch) {
 				ArrayList<Double> inputs = new ArrayList<Double>();
-				inputs.add(d);
+				inputs.addAll(te.input());
 				br.addBPResult(backpropagate(inputs));
 			}
 			
@@ -60,8 +55,8 @@ public class Backpropagation {
 		}
 	}
 	
-	public List<Double> getMiniBatch(ArrayList<Double> trainingSet) {
-		ArrayList<Double> miniBatch = new ArrayList<Double>(miniBatchSize);
+	public List<TrainingEntry> getMiniBatch(List<TrainingEntry> trainingSet) {
+		ArrayList<TrainingEntry> miniBatch = new ArrayList<TrainingEntry>(miniBatchSize);
 		Random r = new Random();
 		OfInt iterator = r.ints().iterator();
 		for(int i = 0; i < miniBatchSize; i++) {
@@ -70,11 +65,11 @@ public class Backpropagation {
 		return miniBatch;
 	}
 	
-	private double averageCost(List<Double> trainingSet) {
+	private double averageCost(List<TrainingEntry> trainingSet) {
 		double sum = 0;
-		for(Double d: trainingSet) {
+		for(TrainingEntry te: trainingSet) {
 			ArrayList<Double> inputs = new ArrayList<Double>();
-			inputs.add(d);
+			inputs.addAll(te.input());
 			sum += function.cost(network.activateInputs(inputs).get(0), 0, inputs);
 		}
 		return sum / ((double)trainingSet.size());
@@ -155,7 +150,7 @@ public class Backpropagation {
 		// When the initial error vector is calculated, calculate back through the network
 		int indexOfPreviousLayer = layers-1;
 		for(int l = layers-1; l > 0; l--) {
-			errorVectors[l-1] = getErrorVector(l, errorVectors[indexOfPreviousLayer]);
+			errorVectors[l-1] = getErrorVector(l, errorVectors[indexOfPreviousLayer], inputs);
 			indexOfPreviousLayer--;
 		}
 		
@@ -176,15 +171,19 @@ public class Backpropagation {
 		return new Basic2DMatrix(weightMatrixData);
 	}
 	
-	private Vector getErrorVector(int layer, Vector previousErrorVector) {
-		return getWeightMetrix(layer+1).transpose().multiply(previousErrorVector).hadamardProduct(MathTool.sigmaDerivativeVector(getRawInputVector(layer)));
+	private Vector getErrorVector(int layer, Vector previousErrorVector, List<Double> inputs) {
+		return getWeightMetrix(layer+1).transpose().multiply(previousErrorVector).hadamardProduct(MathTool.sigmaDerivativeVector(getRawInputVector(layer, inputs)));
 	}
 	
-	private Vector getRawInputVector(int layer) {
+	private Vector getRawInputVector(int layer, List<Double> inputs) {
 		double[] rawInputs = new double[network.getAllNeurons().get(layer-1).size()];
 		int j = 0;
 		for (Neuron n : network.getAllNeurons().get(layer-1)) {
-			rawInputs[j] = n.rawActivationInput();
+			if(layer > 1) {
+				rawInputs[j] = n.rawActivationInput();
+			} else {
+				rawInputs[j] = inputs.get(j) + n.getBias();
+			}
 			j++;
 		}
 		return new BasicVector(rawInputs);

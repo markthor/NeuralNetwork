@@ -48,7 +48,7 @@
               <ul>
                 <li>
                   <a href="#" class="navigator-link " panel-name="test-xml-Default_suite">
-                    <span>C:\Users\Mark\AppData\Local\Temp\testng-eclipse--1450968481\testng-customsuite.xml</span>
+                    <span>C:\Users\Mark\AppData\Local\Temp\testng-eclipse--1907907208\testng-customsuite.xml</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
@@ -90,7 +90,7 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">3 methods,   3 passed</span>
+                    <span class="method-stats">4 methods,   4 passed</span>
                   </li>
                   <li>
                     <span class="method-list-title passed">Passed methods</span>
@@ -112,6 +112,11 @@
                       <span>
                         <img width="3%" src="passed.png"/>
                         <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="test.BackpropagationTest$GenerationTest" hash-for-method="testBackPropagtionWeightMatrixDimensions">testBackPropagtionWeightMatrixDimensions</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img width="3%" src="passed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="test.BackpropagationTest$GenerationTest" hash-for-method="testMatrixMultiplication">testMatrixMultiplication</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                     </div> <!-- method-list-content passed suite-Default_suite -->
@@ -153,12 +158,19 @@
                   <span class="method-name">testBackPropagtionWeightMatrixDimensions</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="testMatrixMultiplication">
+                  </a> <!-- testMatrixMultiplication -->
+                  <span class="method-name">testMatrixMultiplication</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
           </div> <!-- suite-Default_suite-class-passed -->
         </div> <!-- panel Default_suite -->
         <div panel-name="test-xml-Default_suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">C:\Users\Mark\AppData\Local\Temp\testng-eclipse--1450968481\testng-customsuite.xml</span>
+            <span class="header-content">C:\Users\Mark\AppData\Local\Temp\testng-eclipse--1907907208\testng-customsuite.xml</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <pre>
@@ -207,24 +219,28 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(3);
+data.addRows(4);
 data.setCell(0, 0, 0)
 data.setCell(0, 1, 'testBackPropagtion')
 data.setCell(0, 2, 'test.BackpropagationTest$GenerationTest')
-data.setCell(0, 3, 23408);
+data.setCell(0, 3, 14072);
 data.setCell(1, 0, 1)
 data.setCell(1, 1, 'testApplySigmaDerivativeOnVector')
 data.setCell(1, 2, 'test.BackpropagationTest$GenerationTest')
-data.setCell(1, 3, 40);
+data.setCell(1, 3, 32);
 data.setCell(2, 0, 2)
-data.setCell(2, 1, 'testBackPropagtionWeightMatrixDimensions')
+data.setCell(2, 1, 'testMatrixMultiplication')
 data.setCell(2, 2, 'test.BackpropagationTest$GenerationTest')
-data.setCell(2, 3, 10);
+data.setCell(2, 3, 0);
+data.setCell(3, 0, 3)
+data.setCell(3, 1, 'testBackPropagtionWeightMatrixDimensions')
+data.setCell(3, 2, 'test.BackpropagationTest$GenerationTest')
+data.setCell(3, 3, 0);
 window.suiteTableData['Default_suite']= { tableData: data, tableDiv: 'times-div-Default_suite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 23 seconds</span>
+              <span class="suite-total-time">Total running time: 14 seconds</span>
               <div id="times-div-Default_suite">
               </div> <!-- times-div-Default_suite -->
             </div> <!-- times-div -->
@@ -257,11 +273,15 @@ return data;
               </div> <!-- test-method -->
               <div class="test-method">
                 <span class="method-name">testBackPropagtion</span>
-                <span class="method-start">40 ms</span>
+                <span class="method-start">32 ms</span>
               </div> <!-- test-method -->
               <div class="test-method">
                 <span class="method-name">testBackPropagtionWeightMatrixDimensions</span>
-                <span class="method-start">23448 ms</span>
+                <span class="method-start">14120 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">testMatrixMultiplication</span>
+                <span class="method-start">14120 ms</span>
               </div> <!-- test-method -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->

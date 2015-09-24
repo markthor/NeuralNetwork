@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="3" passed="3">
+<testng-results skipped="0" failed="0" total="4" passed="4">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="23468" started-at="2015-09-19T10:19:34Z" finished-at="2015-09-19T10:19:58Z">
+  <suite name="Default suite" duration-ms="14135" started-at="2015-09-22T15:42:09Z" finished-at="2015-09-22T15:42:23Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="23468" started-at="2015-09-19T10:19:34Z" finished-at="2015-09-19T10:19:58Z">
+    <test name="Default test" duration-ms="14135" started-at="2015-09-22T15:42:09Z" finished-at="2015-09-22T15:42:23Z">
       <class name="test.BackpropagationTest$GenerationTest">
-        <test-method status="PASS" signature="testApplySigmaDerivativeOnVector()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testApplySigmaDerivativeOnVector" duration-ms="40" started-at="2015-09-19T12:19:34Z" finished-at="2015-09-19T12:19:34Z">
+        <test-method status="PASS" signature="testApplySigmaDerivativeOnVector()[pri:0, instance:test.BackpropagationTest$GenerationTest@7cdbc5d3]" name="testApplySigmaDerivativeOnVector" duration-ms="32" started-at="2015-09-22T17:42:09Z" finished-at="2015-09-22T17:42:09Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testApplySigmaDerivativeOnVector -->
-        <test-method status="PASS" signature="testBackPropagtion()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testBackPropagtion" duration-ms="23408" started-at="2015-09-19T12:19:34Z" finished-at="2015-09-19T12:19:58Z">
+        <test-method status="PASS" signature="testBackPropagtion()[pri:0, instance:test.BackpropagationTest$GenerationTest@7cdbc5d3]" name="testBackPropagtion" duration-ms="14072" started-at="2015-09-22T17:42:09Z" finished-at="2015-09-22T17:42:23Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testBackPropagtion -->
-        <test-method status="PASS" signature="testBackPropagtionWeightMatrixDimensions()[pri:0, instance:test.BackpropagationTest$GenerationTest@63d4e2ba]" name="testBackPropagtionWeightMatrixDimensions" duration-ms="10" started-at="2015-09-19T12:19:58Z" finished-at="2015-09-19T12:19:58Z">
+        <test-method status="PASS" signature="testMatrixMultiplication()[pri:0, instance:test.BackpropagationTest$GenerationTest@7cdbc5d3]" name="testMatrixMultiplication" duration-ms="0" started-at="2015-09-22T17:42:23Z" finished-at="2015-09-22T17:42:23Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testMatrixMultiplication -->
+        <test-method status="PASS" signature="testBackPropagtionWeightMatrixDimensions()[pri:0, instance:test.BackpropagationTest$GenerationTest@7cdbc5d3]" name="testBackPropagtionWeightMatrixDimensions" duration-ms="0" started-at="2015-09-22T17:42:23Z" finished-at="2015-09-22T17:42:23Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testBackPropagtionWeightMatrixDimensions -->

@@ -33,7 +33,7 @@ public class Genome {
 	
 	public void mutateHeavy(double from, double to) {
 		Random rand = new Random();
-		DoubleStream ds = rand.doubles(-10, 10);
+		DoubleStream ds = rand.doubles(from, to);
 		OfDouble it = ds.iterator();
 		for (int i = 0; i < genCode.length; i++) {
 			genCode[i] += it.nextDouble();

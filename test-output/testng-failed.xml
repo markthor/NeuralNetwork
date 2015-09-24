@@ -5,7 +5,7 @@
     <classes>
       <class name="test.BackpropagationTest$GenerationTest">
         <methods>
-          <include name="testBackPropagtion"/>
+          <include name="testMatrixMultiplication"/>
         </methods>
       </class> <!-- test.BackpropagationTest$GenerationTest -->
     </classes>
